@@ -85,7 +85,7 @@ if(isset($_SESSION['type'])==1)
                   <a href="profile.php" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Cerrar sesión</a>
+                  <a href="conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
                 </div>
               </li>
             </ul>
@@ -185,6 +185,7 @@ if(isset($_SESSION['type'])==1)
                   $usuariosMod=selectModificarUsuario($id);
                   //$tipos    =selectTipoUsuario();
                  if($renglon=mysqli_fetch_array($usuariosMod)) {
+                  $pass=desencriptar($renglon['password'],"xXT34mM4t3Xx");
                 ?>
                 <div class="form-group col-md-3"> 
                   <label for="nombre">Nombre</label>
@@ -197,10 +198,10 @@ if(isset($_SESSION['type'])==1)
                   <?php echo "<input type=email class=form-control name=correo placeholder=Correo value={$renglon['correo']}>";?>
                   <br>
                   <label for="contraseña">Contraseña</label>
-                  <?php echo "<input type=password class=form-control name=contrasenia placeholder=Contraseña value={$renglon['password']}>";?>
+                  <?php echo "<input type=password class=form-control name=contrasenia placeholder=Contraseña value=$pass>";?>
                   <br>
                   <label for="contraseña2">Repita Contraseña</label>
-                  <?php echo "<input type=password class=form-control name=contrasenia2 placeholder=Repita Contraseña value={$renglon['password']}>"; ?>
+                  <?php echo "<input type=password class=form-control name=contrasenia2 placeholder=Repita Contraseña value=$pass>"; ?>
                 </div>
                 <!--segunda columna-->
                  <div class="form-group col-md-3">

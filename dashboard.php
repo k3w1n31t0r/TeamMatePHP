@@ -1,7 +1,7 @@
 <?php
 session_start(); 
 if(isset($_SESSION['type'])==1)
-{
+{require('funciones/funciones.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,7 +82,7 @@ if(isset($_SESSION['type'])==1)
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="profile.php" class="btn btn-default btn-flat">Perfil</a>
+                  <?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].' class="btn btn-default btn-flat">Perfil</a>'?>
                 </div>
                 <div class="pull-right">
                   <a href="conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
@@ -182,7 +182,8 @@ if(isset($_SESSION['type'])==1)
           <div class="col-lg-4 col-xs-6">
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>150</h3>
+              <?php $numero=selectNuevosTickets();?>
+              <h3> <?php echo $numero; ?></h3>
 
               <p>Nuevos tickets</p>
             </div>
@@ -237,31 +238,47 @@ if(isset($_SESSION['type'])==1)
                   <p class="text-center">
                     <strong>Estado de tickets</strong>
                   </p>
-
+                  <?php 
+                    $numeroTotal=selectNumeroTickets(); 
+                    $numeroEnProceso=selectNumeroTicketsEnProceso();
+                    $numeroTerminados=selectNumeroTicketsTerminados();
+                    $numeroCerrados=selectNumeroTicketsCerrados();
+                    $porcentajeNuevos=($numero*100)/$numeroTotal;
+                    $porcentajeProceso=($numeroEnProceso*100)/$numeroTotal;
+                    $porcentajeTerminados=($numeroTerminados*100)/$numeroTotal;
+                    $porcentajeCerrados=($numeroCerrados*100)/$numeroTotal;
+                  ?>
                   <div class="progress-group">
-                    <span class="progress-text">Tickets completos</span>
-                    <span class="progress-number"><b>160</b>/200 VARIABLES CONTADOR</span>
+                    <span class="progress-text">Tickets cerrados</span>
+                    <span class="progress-number"><b><?php echo $numeroCerrados; ?></b>/<?php echo $numeroTotal ?></span>
 
                     <div class="progress sm">
-                      <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                      <div class="progress-bar progress-bar-red" style="width: <?php echo $porcentajeCerrados."%"?>"></div>
+                    </div>
+                  </div>
+                  <div class="progress-group">
+                    <span class="progress-text">Tickets Terminados</span>
+                    <span class="progress-number"><b><?php echo $numeroTerminados; ?></b>/<?php echo $numeroTotal; ?></span>
+
+                    <div class="progress sm">
+                      <div class="progress-bar progress-bar-aqua" style="width: <?php echo $porcentajeTerminados."%"?>"></div>
                     </div>
                   </div>
                   <!-- /.progress-group -->
                   <div class="progress-group">
                     <span class="progress-text">Tickets nuevos</span>
-                    <span class="progress-number"><b>310</b>/400 VARIABLES CONTADOR</span>
-
+                    <span class="progress-number"><b><?php echo $numero; ?></b>/<?php echo $numeroTotal; ?></span>
                     <div class="progress sm">
-                      <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                      <div class="progress-bar progress-bar-yellow" style="width: <?php echo $porcentajeNuevos."%"?>"></div>
                     </div>
                   </div>
                   <!-- /.progress-group -->
                   <div class="progress-group">
                     <span class="progress-text">Tickets en proceso</span>
-                    <span class="progress-number"><b>480</b>/800 VARIABLES CONTADOR</span>
+                    <span class="progress-number"><b><?php echo $numeroEnProceso; ?></b>/<?php echo $numeroTotal; ?></span>
 
                     <div class="progress sm">
-                      <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                      <div class="progress-bar progress-bar-green" style="width: <?php echo $porcentajeProceso."%"?>"></div>
                     </div>
                   </div>
                   <!-- /.progress-group -->

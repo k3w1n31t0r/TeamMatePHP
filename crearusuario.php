@@ -176,7 +176,7 @@ if(isset($_SESSION['type'])==1)
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" method="post" action="funciones/funciones.php">
+            <form role="form" method="post" action="funciones/crearUsuario.php">
               <div class="box-body">
                 <!--primer columna-->
                 <div class="form-group col-md-3">

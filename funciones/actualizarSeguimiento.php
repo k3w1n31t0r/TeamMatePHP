@@ -1,35 +1,20 @@
 <?php
-
-if(isset($_POST['modificarUsuario'])==10)
-{
-  require_once('funciones.php');
-  require_once('meta.php');
-  $nombre=$_POST['nombre'];
-  $nickname=$_POST['nickname'];
-  $correo=$_POST['correo'];      
-  $tipousuario=$_POST['tipousuario'];   
-  $telefono=$_POST['telefono'];
-  $puesto=$_POST['puesto'];
-  $idusuario=$_POST['idusuario'];
-  $contrasenia2=$_POST['contrasenia'];
-  $contrasenia=encriptar($contrasenia2,"xXT34mM4t3Xx");
-  if (isset($_POST['equipo']))
-  {
-     $equipo=$_POST['equipo'];
-  }
-  else{
-  $equipo=null;
-      }
-
-  if(isset($_POST['empresa']))
-   {
-    $empresa=$_POST['empresa'];
-    }
-  else{
-   $empresa=null;
-   } 
-
-  $resultado=actualizarUsuario($nombre, $nickname,$correo,$contrasenia,$tipousuario,$telefono,$puesto,$equipo,$empresa,$idusuario);
+session_start();
+if(isset($_POST['guardarSeguir'])=="1" ){
+require('funciones.php');
+require('meta.php');
+$aidi=$_POST['aidi'];
+$asunto=$_POST['asunto'];
+$tipoTicket=$_POST['tipoTicket'];
+$estatus=$_POST['estatus'];
+$prioridad=$_POST['prioridad'];
+$cliente=$_POST['cliente'];
+$proyecto=$_POST['proyecto'];
+$agentes=$_POST['agentes'];
+$descripcion=$_POST['descripcion'];
+$resultado=actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cliente,$proyecto,$agentes,$descripcion);
+}
+//
   if ($resultado==true) {
   ?>
   <a href="#" id="enlace" data-toggle="modal" data-target="#modal-success"></a>
@@ -40,10 +25,10 @@ if(isset($_POST['modificarUsuario'])==10)
                 <h4 class="modal-title">:3</h4>
               </div>
               <div class="modal-body">
-                <p>¡Usuario modificado con exito!&hellip;</p>
+                <p>¡Seguimiento actualizado!&hellip;</p>
               </div>
               <div class="modal-footer">
-                <a href='../usuarios.php' class="btn btn-outline">Aceptar</a>
+                <a href='../mistickets.php' class="btn btn-outline">Aceptar</a>
               </div>
             </div>
             <!-- /.modal-content -->
@@ -66,8 +51,5 @@ $("#enlace").click();
 }else{
   echo "Fallo";
 }
-
-}
-
 
 ?>

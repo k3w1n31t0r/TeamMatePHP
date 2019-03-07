@@ -1,35 +1,34 @@
 <?php
-
-if(isset($_POST['modificarUsuario'])==10)
-{
+session_start();
+//inserta usuario
+if(isset($_POST['insertarUsuario'])=="10"){
   require_once('funciones.php');
   require_once('meta.php');
-  $nombre=$_POST['nombre'];
   $nickname=$_POST['nickname'];
-  $correo=$_POST['correo'];      
-  $tipousuario=$_POST['tipousuario'];   
+  $nombre=$_POST['nombre'];
+  $correo=$_POST['correo'];
+  $tipousuario=$_POST['tipousuario'];
   $telefono=$_POST['telefono'];
   $puesto=$_POST['puesto'];
-  $idusuario=$_POST['idusuario'];
   $contrasenia2=$_POST['contrasenia'];
   $contrasenia=encriptar($contrasenia2,"xXT34mM4t3Xx");
-  if (isset($_POST['equipo']))
-  {
-     $equipo=$_POST['equipo'];
+
+ if(isset($_POST['empresa'])){
+    $empresa=$_POST['empresa'];
   }
   else{
-  $equipo=null;
-      }
+    $empresa=null;
+  }
 
-  if(isset($_POST['empresa']))
-   {
-    $empresa=$_POST['empresa'];
-    }
+  if(isset($_POST['equipo'])){
+    $equipo=$_POST['equipo'];
+  }
   else{
-   $empresa=null;
-   } 
+    $equipo=null;
+  }
+  $resultado=insertUsuario($nickname,$nombre,$correo,$contrasenia,$tipousuario,$empresa,$telefono,$puesto,$equipo);
+}
 
-  $resultado=actualizarUsuario($nombre, $nickname,$correo,$contrasenia,$tipousuario,$telefono,$puesto,$equipo,$empresa,$idusuario);
   if ($resultado==true) {
   ?>
   <a href="#" id="enlace" data-toggle="modal" data-target="#modal-success"></a>
@@ -40,7 +39,7 @@ if(isset($_POST['modificarUsuario'])==10)
                 <h4 class="modal-title">:3</h4>
               </div>
               <div class="modal-body">
-                <p>¡Usuario modificado con exito!&hellip;</p>
+                <p>¡Usuario ereado con exito!&hellip;</p>
               </div>
               <div class="modal-footer">
                 <a href='../usuarios.php' class="btn btn-outline">Aceptar</a>
@@ -66,8 +65,5 @@ $("#enlace").click();
 }else{
   echo "Fallo";
 }
-
-}
-
 
 ?>

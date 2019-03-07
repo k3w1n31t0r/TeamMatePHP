@@ -83,10 +83,10 @@ if(isset($_SESSION['type'])==1)
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="profile.php" class="btn btn-default btn-flat">Perfil</a>
+                  <?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].' class="btn btn-default btn-flat">Perfil</a>'?>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Cerrar sesión</a>
+                  <a href="conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
                 </div>
               </li>
             </ul>
@@ -138,8 +138,8 @@ if(isset($_SESSION['type'])==1)
             <li><a href="dashboard.php"><i class="fa fa-circle-o"></i>Supervisor</a></li>
             <li><a href="bandeja.php"><i class="fa fa-circle-o"></i>Bandeja de asignacion</a></li>
             <li><a href="teamtask.php"><i class="fa fa-circle-o"></i>Tareas de equipo</a></li>
-            <li><a href="mistickets.php"><i class="fa fa-circle-o"></i>Mis tickets</a></li>
-            <li class="active"><a href="crearticketsup.php"><i class="fa fa-circle-o"></i>Crear ticket</a></li>
+            <li class="active"><a href="mistickets.php"><i class="fa fa-circle-o"></i>Mis tickets</a></li>
+            <li><a href="crearticketsup.php"><i class="fa fa-circle-o"></i>Crear ticket</a></li>
           </ul>
         </li>
 
@@ -178,7 +178,7 @@ if(isset($_SESSION['type'])==1)
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" method="post" action="#">
+            <form role="form" method="post" action="funciones/actualizarSeguimiento.php">
               <div class="box-body">
                 <div class="form-group col-xs-6">
                   <label for="asunto">Asunto</label>
@@ -193,7 +193,7 @@ if(isset($_SESSION['type'])==1)
                 </div>
                 <div class="form-group col-xs-3">
                   <label for="tipo">Tipo de ticket</label>
-                    <select class="form-control" id="tipo" required="">
+                    <select class="form-control" id="tipo" required="" name="tipoTicket">
                        <?php
                           $resultado2=selectTipos();
                            while ($renglon=mysqli_fetch_array($resultado2)){                                           
@@ -204,7 +204,7 @@ if(isset($_SESSION['type'])==1)
                 </div>
                 <div class="form-group col-xs-3">
                   <label for="estatus">Estatus</label>
-                    <select class="form-control" id="estatus">
+                    <select class="form-control" id="estatus" name="estatus">
                        <?php
                           $resultado2=selectEstados();
                            while ($renglon=mysqli_fetch_array($resultado2)){                                      
@@ -215,7 +215,7 @@ if(isset($_SESSION['type'])==1)
                 </div>
                 <div class="form-group col-xs-3">
                   <label for="prioridad">Prioridad</label>
-                    <select class="form-control" id="prioridad">
+                    <select class="form-control" id="prioridad" name="prioridad">
                       <?php
                           $resultado2=selectPrioridad();
                            while ($renglon=mysqli_fetch_array($resultado2)){                                           
@@ -226,7 +226,7 @@ if(isset($_SESSION['type'])==1)
                 </div>
                 <div class="form-group col-xs-3">
                   <label for="cliente">Cliente</label>
-                    <select class="form-control" id="cliente">
+                    <select class="form-control" id="cliente" name="cliente">
                        <?php
                           $resultado2=selectCliente();
                            while ($renglon=mysqli_fetch_array($resultado2)){                                           
@@ -238,7 +238,7 @@ if(isset($_SESSION['type'])==1)
                 </div>
                  <div class="form-group col-xs-3">
                   <label for="proyecto">Proyecto</label>
-                    <select class="form-control" id="proyecto">
+                    <select class="form-control" id="proyecto" name="proyecto">
                       <?php
                           $resultado2=selectProyecto();
                            while ($renglon=mysqli_fetch_array($resultado2)){                                           
@@ -273,7 +273,7 @@ if(isset($_SESSION['type'])==1)
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary" value="1">Guardar</button>
+                <button type="submit" class="btn btn-primary" value="1" name="guardarSeguir">Guardar</button>
                 &nbsp&nbsp&nbsp&nbsp&nbsp
                 <button type="submit" class="btn btn-danger" value="2">Finalizar</button>
               </div>
@@ -320,7 +320,7 @@ if(isset($_SESSION['type'])==1)
         } 
       ?>
     </ul>
-        <form role="form" method="post" action="funciones/crearActividad.php">
+        <form id="frmajax" role="form" method="post">
               <div class="box-body">
                 <div class="form-group col-xs-6">
                     <input type="hidden" name="id" value=<?php echo $aidi;?> >
@@ -330,7 +330,7 @@ if(isset($_SESSION['type'])==1)
                           <label>Escribe una descripción</label>
                            <textarea class="form-control" rows="3" placeholder="Descripción ... actividad" name="desActividad"></textarea>
                           <div class="box-footer">
-                              <button type="submit" class="btn btn-primary" value="actividad" name="actividad">Guardar</button>
+                              <button class="btn btn-primary" id="btnguardar">Guardar</button>
                           </div>
                     </div>    
               </div>
@@ -677,6 +677,22 @@ if(isset($_SESSION['type'])==1)
       'autoWidth'   : false
 
     })
+  });
+
+  $(document).ready(function(){
+    $('#btnguardar').click(function(){
+      var datos=$('#frmajax').serialize();
+      $.ajax({
+        type:"POST",
+        url:"funciones/crearActividad.php",
+        data:datos,
+        success:function(r){
+         return false;
+        }
+      });
+
+      
+    });
   });
 </script>
 

@@ -94,10 +94,11 @@ if(isset($_SESSION['type'])==1)
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="profile.php" class="btn btn-default btn-flat">Perfil</a>
+                  <?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].' class="btn btn-default btn-flat">Perfil</a>'?>
+
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Cerrar sesión</a>
+                  <a href="conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
                 </div>
               </li>
             </ul>
@@ -163,7 +164,7 @@ if(isset($_SESSION['type'])==1)
           </a>
           <ul class="treeview-menu">
             <li class="active"><a href="usuarios.php"><i class="fa fa-circle-o"></i>Usuarios</a></li>
-            <li><a href="profile.php"><i class="fa fa-circle-o"></i>Perfil</a></li>
+            <li><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
           </ul>
         </li>
       </ul>

@@ -83,7 +83,7 @@ if(isset($_SESSION['type'])==1)
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="profile.php" class="btn btn-default btn-flat">Perfil</a>
+                  <?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].' class="btn btn-default btn-flat">Perfil</a>'?>
                 </div>
                 <div class="pull-right">
                   <a href="conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
@@ -183,7 +183,7 @@ if(isset($_SESSION['type'])==1)
                 <div class="row"></div>
                 <div class="form-group col-md-12">
                   <label for="asunto">Asunto</label>
-                  <input type="text" class="form-control" id="asunto" placeholder="Asunto" name="asunto">
+                  <input type="text" class="form-control" id="asunto" placeholder="Asunto" name="asunto" required="">
                 </div>
                 <div class="form-group col-md-3">
                   <label for="tipo">Tipo de ticket</label>
@@ -208,7 +208,7 @@ if(isset($_SESSION['type'])==1)
                     <br>
                 <div class="form-group">
                   <label>Agente</label>
-                   <select class="form-control select2" multiple="multiple" name="agentes[]" data-placeholder="Selecciona agentes"
+                   <select class="form-control select2" multiple="multiple" name="agentes[]" data-placeholder="Selecciona agentes" required=""
                         style="width: 100%;">
                       <?php
                           $resultado=selectAgente();

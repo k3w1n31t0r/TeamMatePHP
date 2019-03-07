@@ -2,9 +2,10 @@
 session_start(); 
 
 	require_once('connect_db.php');
-
+    require('../funciones/funciones.php');
 	$email=$_POST['correo'];
-	$pass=$_POST['pass'];
+	$pass2=$_POST['pass'];
+    $pass=encriptar($pass2,"xXT34mM4t3Xx");
 
 $sql=("SELECT * FROM help_desk_user_account WHERE correo='$email' and password='$pass'"); // realizo la comparación con la base de datos
     $res=mysqli_query($link, $sql);

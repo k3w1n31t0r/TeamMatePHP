@@ -87,7 +87,7 @@ if(isset($_SESSION['type'])==1)
                   <a href="profile.php" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Cerrar sesión</a>
+                  <a href="conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
                 </div>
               </li>
             </ul>
@@ -252,12 +252,13 @@ if(isset($_SESSION['type'])==1)
                  <div class="form-group col-xs-3">
                   <div class="form-group">
                   <label>Agente</label>
-                   <select class="form-control select2" multiple="multiple" name="agentes[]" data-placeholder="Selecciona agentes"
+                   <select class="form-control select2" required="" multiple="multiple" name="agentes[]" data-placeholder="Selecciona agentes"
                         style="width: 100%;">
                       <?php
                           $resultado2=selectAgente();
                            while ($renglon=mysqli_fetch_array($resultado2)){
-                            $resAgente =selectAsign($renglon['id']);                                           
+                            $resAgente =selectAsign($renglon['id']); 
+                            $renglon['id'];                                        
                             echo '<option value='.$renglon['id'].' '.($resAgente==$aidi ? 'selected="selected"' : '').'>'.$renglon['name'].'</option>';
                         }
                       ?>
