@@ -134,7 +134,7 @@ function selectTipoUsuario(){
 }
 
 //Selecciona tipo de usuarios
-function insertUsuario($nickname,$nombre,$correo,$contrasenia,$tipousuario,$empresa,$telefono,$puesto,$equipo){
+function insertUsuario($nickname,$nombre,$correo,$contrasenia,$tipousuario,$empresa,$telefono,$puesto,$equipo,$fileName1){
 require('../conexion/connect_db.php');
 
 $sql="INSERT INTO help_desk_user_account(username, password, type, correo, activo) VALUES (\"$nickname\",\"$contrasenia\",\"$tipousuario\",\"$correo\",1)";
@@ -160,7 +160,7 @@ switch ($tipousuario) {
     break;
   case 2:
   //cliente
-    $sql="INSERT INTO help_desk_client(name, email, telephone, job_title, company_id_id, fk_username_cliente) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\",\"$empresa\",\"$nickname\")";
+    $sql="INSERT INTO help_desk_client(name, email, telephone, job_title, profile_picture, company_id_id, fk_username_cliente) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\",\"$fileName1\",\"$empresa\",\"$nickname\")";
         $resultado2=$link->query($sql);
         var_dump($resultado2);
     break;
@@ -273,10 +273,18 @@ function selectNumeroTicketsCerrados(){
 
 //CONTADORES DE TICKETS ↑↑↑ ↑↑↑ 
 
-//select mis propios tickets
+//select mis propios tickets ADMINISTRADOR Y AGENTE
 function verMisTickets($miId){
     require('conexion/connect_db.php');
-    $sql="SELECT * FROM help_desk_ticket TI INNER JOIN help_desk_ticket_asign TA ON TA.ticket_id_id=TI.id_ticket INNER JOIN help_desk_agent AG ON ag.id=TA.user_agent_id_id WHERE ag.fk_username_agente=\"$miId\" and activo=1 and (TI.status_id_id=1 OR TI.status_id_id=2)";
+    $sql="SELECT Ti.*,TA.*,AG.*,cli.name as nombre FROM help_desk_ticket TI INNER JOIN help_desk_ticket_asign TA ON TA.ticket_id_id=TI.id_ticket INNER JOIN help_desk_agent AG ON ag.id=TA.user_agent_id_id INNER JOIN help_desk_client cli ON cli.id=TA.user_client_id_id WHERE ag.fk_username_agente=\"$miId\" and activo=1 and (TI.status_id_id=1 OR TI.status_id_id=2)";
+    $resultado=$link->query($sql);
+     $link->close();
+
+    return $resultado;
+  }
+function verMisTicketsCliente($miId){
+    require('conexion/connect_db.php');
+    $sql="SELECT * FROM help_desk_ticket WHERE user_id_id=\"$miId\" and activo=1 and (status_id_id=1 OR status_id_id=2)";
     $resultado=$link->query($sql);
      $link->close();
 
@@ -290,6 +298,16 @@ function verMisTickets($miId){
 function selectUsuarios(){
   require('conexion/connect_db.php');
     $sql="SELECT * FROM help_desk_user_account UA INNER JOIN help_desk_type_account TA ON TA.id_tipo_cuenta=UA.type WHERE UA.activo=1";
+    $resultado=$link->query($sql);
+    $link->close();
+
+    return $resultado;
+}
+
+//Select Imagen Usuario
+function selectImagen($id){
+   require('conexion/connect_db.php');
+    $sql="SELECT profile_picture FROM help_desk_user_account WHERE username=\"$id\"";
     $resultado=$link->query($sql);
     $link->close();
 
@@ -401,7 +419,7 @@ function selectTicketsTeamTask(){
 
 function selectActividades($id){
   require('conexion/connect_db.php');
-  $sql="SELECT * FROM help_desk_ticket_activity TA INNER JOIN help_desk_agent AG ON AG.id=TA.user_agent_id_id WHERE TA.ticket_id_id=\"$id\" ORDER BY TA.id ASC"; 
+  $sql="SELECT * FROM help_desk_ticket_activity TA WHERE TA.ticket_id_id=\"$id\" ORDER BY TA.id ASC"; 
   $resultado=$link->query($sql);
     $link->close();
 
@@ -409,14 +427,13 @@ function selectActividades($id){
 }
 
 //funcion insertar actividad
-function insertarActividad($actividad,$id,$estado,$agente){
+function insertarActividad($actividad,$id,$estado,$user){
   require('../conexion/connect_db.php');
-  $sql="INSERT INTO `help_desk_ticket_activity`(`descrip`, `sub_date`, `time`, `activ_type_id_id`, `ticket_id_id`, `user_agent_id_id`) VALUES (\"$actividad\",NOW(),NOW(),$estado,$id,$agente)";
+  $sql="INSERT INTO `help_desk_ticket_activity`(`descrip`, `sub_date`, `time`, `activ_type_id_id`, `ticket_id_id`, `user_agent_id_id`) VALUES (\"$actividad\",NOW(),NOW(),$estado,$id,\"$user\")";
   echo $resultado=$link->query($sql);
   $link->close();
-
-  
 }
+
 
 function selectModificarUsuario($id){
    require('conexion/connect_db.php');

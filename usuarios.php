@@ -63,39 +63,29 @@ if(isset($_SESSION['type'])==1)
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php echo $_SESSION['username']; ?></span>
+                            <?php $imagen=selectImagen($_SESSION['username']);
+                    if ($imagen2=mysqli_fetch_array($imagen)) {
+                        $img=$imagen2['profile_picture'];
+                    }
+              
+             echo "<img src=\"imagenes/$img\" class=\"user-image\" alt=\"User Image\">" ?>
+              <span class="hidden-xs"><?php echo $_SESSION["correo"];?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-
+                <?php echo "<img src=\"imagenes/$img\" class=\"user-circle\" alt=\"User Image\">" ?>
                 <p>
                   <?php echo $_SESSION['username']; ?>
                   <small>Member since Nov. 2012</small>
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li>
+             
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
                   <?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].' class="btn btn-default btn-flat">Perfil</a>'?>
-
                 </div>
                 <div class="pull-right">
                   <a href="conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
@@ -109,16 +99,16 @@ if(isset($_SESSION['type'])==1)
           </li>
         </ul>
       </div>
+
     </nav>
   </header>
-  <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <?php echo "<img src=\"imagenes/$img\" class=\"img-circle\" alt=\"User Image\">" ?>
         </div>
         <div class="pull-left info">
           <p><?php echo $_SESSION['username']; ?></p>

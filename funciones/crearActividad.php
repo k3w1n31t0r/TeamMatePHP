@@ -5,7 +5,8 @@ require('meta.php');
 $actividad = $_POST['desActividad'];
 $id        = $_POST['id'];
 $estado    = $_POST['tip'];
-$agente    = $_SESSION['id_agente'];
+$user=$_SESSION['username'];
 
-$resultado=insertarActividad($actividad,$id,$estado,$agente);
+	$resultado=insertarActividad($actividad,$id,$estado,$user);
+
 ?>

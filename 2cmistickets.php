@@ -1,6 +1,6 @@
 <?php
 session_start(); 
-if(isset($_SESSION['type'])==1)
+if(isset($_SESSION['type'])==2)
 {require('funciones/funciones.php');
 ?>
 <!DOCTYPE html>
@@ -8,7 +8,7 @@ if(isset($_SESSION['type'])==1)
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>TeamMate | Crear usuario</title>
+  <title>TeamMate | Mis tickets</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -41,7 +41,7 @@ if(isset($_SESSION['type'])==1)
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="dashboard.php" class="logo">
+    <a href="2cmistickets.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>T</b>M</span>
       <!-- logo for regular state and mobile devices -->
@@ -63,7 +63,7 @@ if(isset($_SESSION['type'])==1)
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                           <?php $imagen=selectImagen($_SESSION['username']);
+                        <?php $imagen=selectImagen($_SESSION['username']);
                     if ($imagen2=mysqli_fetch_array($imagen)) {
                         $img=$imagen2['profile_picture'];
                     }
@@ -88,7 +88,7 @@ if(isset($_SESSION['type'])==1)
                   <?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].' class="btn btn-default btn-flat">Perfil</a>'?>
                 </div>
                 <div class="pull-right">
-                  <a href="conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
+                  <a href="../conexion/cerrar.php" class="btn btn-default btn-flat">Cerrar sesión</a>
                 </div>
               </li>
             </ul>
@@ -129,7 +129,7 @@ if(isset($_SESSION['type'])==1)
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">BARRA PRINCIPAL</li>
-        <li class="treeview">
+        <li class="active treeview menu-open">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             <span class="pull-right-container">
@@ -137,15 +137,11 @@ if(isset($_SESSION['type'])==1)
             </span>
           </a>
          <ul class="treeview-menu">
-            <li><a href="dashboard.php"><i class="fa fa-circle-o"></i>Supervisor</a></li>
-            <li><a href="bandeja.php"><i class="fa fa-circle-o"></i>Bandeja de asignacion</a></li>
-            <li><a href="teamtask.php"><i class="fa fa-circle-o"></i>Tareas de equipo</a></li>
-            <li><a href="mistickets.php"><i class="fa fa-circle-o"></i>Mis tickets</a></li>
+            <li   class="active"><a href="mistickets.php"><i class="fa fa-circle-o"></i>Mis tickets</a></li>
             <li><a href="crearticketsup.php"><i class="fa fa-circle-o"></i>Crear ticket</a></li>
           </ul>
         </li>
-
-       <li class="active treeview menu-open">
+       <li class="treeview">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Administracion</span>
             <span class="pull-right-container">
@@ -153,7 +149,6 @@ if(isset($_SESSION['type'])==1)
             </span>
           </a>
           <ul class="treeview-menu">
-            <li  class="active"><a href="usuarios.php"><i class="fa fa-circle-o"></i>Usuarios</a></li>
             <li><a href="profile.php"><i class="fa fa-circle-o"></i>Perfil</a></li>
           </ul>
         </li>
@@ -167,72 +162,73 @@ if(isset($_SESSION['type'])==1)
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Administracion de usuarios
-        <small>Creación de usuario</small>
+        Bandeja de entrada
+        <small>Mis tickets</small>
       </h1>
     </section>
 
     <!-- Main content -->
     <section class="content">
-       <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Crear usuario</h3>
+      <div class="row">
+        <div class="col-xs-12">        
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Bandeja de entrada</h3>
             </div>
             <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" method="post" action="funciones/crearUsuario.php" enctype="multipart/form-data">
-              <div class="box-body">
-                <!--primer columna-->
-                <div class="form-group col-md-3">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" name="nombre" placeholder="Nombre">
-                  <br>
-                  <label for="nickname">Nickname</label>
-                  <input type="text" class="form-control" name="nickname" placeholder="Nickname">
-                  <br>
-                  <label for="correo">Correo</label>
-                  <input type="email" class="form-control" name="correo" placeholder="Correo">
-                  <br>
-                  <label for="contraseña">Contraseña</label>
-                  <input type="password" class="form-control" name="contrasenia" placeholder="Contraseña">
-                  <br>
-                  <label for="contraseña2">Repita Contraseña</label>
-                  <input type="password" class="form-control" name="contrasenia2" placeholder="Repita Contraseña">
-                </div>
-                <!--segunda columna-->
-                 <div class="form-group col-md-3">
-                  <label for="tipo">Tipo de usuario</label>
-                    <select class="form-control" id="tipousuario" name="tipousuario" onchange="din()">
-                      <?php 
-                          $resultado=selectTipoUsuario();
-                           while ($renglon=mysqli_fetch_array($resultado)){                                           
-                            echo "<option value={$renglon['id_tipo_cuenta']}>{$renglon['tipo_cuenta']}</option>";
-                        }
-                      ?>
-                    </select> 
-                   
-                  <br>
-                  <label for="telefono">Telefono</label>
-                  <input type="text" class="form-control" name="telefono" placeholder="Telefono">
-                  <br>
-                  <label for="imagen">Fotografia de perfil</label>
-                      <input type="file" name="imagen">
-                  <br>
-                 </div>
-                 <!--tercer columna DINAMICA-->
-                 <div class="form-group col-md-3">
-                  <label for="puesto">Puesto</label>
-                  <input type="text" class="form-control" name="puesto" placeholder="Puesto">
-                  <div id="formdim">
-                  </div>
-                 </div>
-                </div>           
-              <!-- /.box-body -->
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary" value="10" name="insertarUsuario">Guardar</button>
-              </div>
-            </form>
+
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Asunto</th>
+                  <th>Descripción</th>
+                  <th>Remitente</th>
+                  <th>Resolver ticket</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                    $miId=$_SESSION['username'];
+                    $resultado=verMisTickets($miId);
+                    while ($renglon=mysqli_fetch_array($resultado)){
+
+                   // $id=$renglon['id_ticket'];
+                ?>
+                <tr>
+                  <td><?php echo $renglon['id_ticket'];?> </td>
+                  <td><?php echo $renglon['subject'];?></td>
+                  <td><?php echo $renglon['descrip'];?></td>
+                  <td><?php echo $renglon['nombre'];?></td>
+                  <td>
+                    <div  class="col-xs-8">
+                      <?php echo '<a href=seguir.php?id='.$renglon['id_ticket'].'>Resolver</a>'?>
+                    </div>
+                  </td>
+                </tr>  
+                <?php
+                    }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <th>ID</th>
+                  <th>Asunto</th>
+                  <th>Descripción</th>
+                  <th>Remitente</th>
+                  <th>resolver ticket</th>
+                </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.box-body -->
           </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>
@@ -457,53 +453,6 @@ if(isset($_SESSION['type'])==1)
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
 <!-- page script -->
-
-<script type="text/javascript">
-        function din()
-          {
-              var x=document.getElementById("tipousuario").value;
-              
-              if(x==3)
-                  {<?php $resultado=selectEquipo();?>
-                    var z="<br><label for=equipo>Equipo</label><select class=form-control name=equipo id=equipo>";
-
-                    var opcion='<?php while ($renglon=mysqli_fetch_array($resultado)) echo"{<option value={$renglon['id']}>{$renglon['descrip']}</option>";?>';
-                    var y ="</select><br>";
-                    document.getElementById("formdim").innerHTML=z+opcion+y;                       
-                  }
-                                              
-              if(x==2)
-                  {//cliente
-                    <?php $resultado=selectCompanies();?>
-                    var z="<br><label for=empresa>Empresa</label><select class=form-control name=empresa id=empresa>";
-
-                    var opcion='<?php while ($renglon=mysqli_fetch_array($resultado)) echo"{<option value={$renglon['id']}>{$renglon['name']}</option>";?>';
-                    var y ="</select><br>";
-                    document.getElementById("formdim").innerHTML=z+opcion+y;
-                  }
-              
-               if(x==1)
-                  {//otro
-                    document.getElementById("formdim").innerHTML="";  
-                  }
-
-          }
-</script>
-<script type="text/javascript">
-  function validarPasswd()
-          {
-    var p1 = document.getElementById("contrasenia").value;
-    var p2 = document.getElementById("contrasenia2").value;
-    
-    if (p1 != p2) {
-      alert("Las passwords deben de coincidir");
-      return false;
-    } else {
-      alert("Todo esta correcto");
-      return true; 
-    }
-          }
-</script>
 <script>
   $(function () {
     $('#example1').DataTable()

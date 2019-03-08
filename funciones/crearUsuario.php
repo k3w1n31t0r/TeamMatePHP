@@ -4,6 +4,8 @@ session_start();
 if(isset($_POST['insertarUsuario'])=="10"){
   require_once('funciones.php');
   require_once('meta.php');
+  $dir ="../imagenes/"; //DIRECTORIO al que iran las imagenes
+
   $nickname=$_POST['nickname'];
   $nombre=$_POST['nombre'];
   $correo=$_POST['correo'];
@@ -12,6 +14,28 @@ if(isset($_POST['insertarUsuario'])=="10"){
   $puesto=$_POST['puesto'];
   $contrasenia2=$_POST['contrasenia'];
   $contrasenia=encriptar($contrasenia2,"xXT34mM4t3Xx");
+//IMAGENES
+  $img_n=$_FILES['imagen']['name'];
+  $img_f=$_FILES['imagen']['tmp_name'];
+  $tipo=$_FILES['imagen']["type"];
+
+  if(!$tipo == "image/jpeg" ||!$tipo  == "image/jpg"|| !$tipo  == "image/png" || !$tipo == "image/gif"){
+    echo "Fallo en el tipo de imagen";
+  }
+  //arreglos para subir imagen
+  $arreglo = explode(".", $img_n);
+  $len = count($arreglo);
+  $ext = $arreglo[$len-1];
+
+  //encripta Nombre
+  $val=md5_file($img_f);
+
+  //sube imagen
+  if ($img_n !='') {
+    $fileName1 = $val.".$ext";
+    @copy($img_f, $dir.$fileName1);
+  }
+//arreglos para subir imagen
 
  if(isset($_POST['empresa'])){
     $empresa=$_POST['empresa'];
@@ -26,7 +50,7 @@ if(isset($_POST['insertarUsuario'])=="10"){
   else{
     $equipo=null;
   }
-  $resultado=insertUsuario($nickname,$nombre,$correo,$contrasenia,$tipousuario,$empresa,$telefono,$puesto,$equipo);
+  $resultado=insertUsuario($nickname,$nombre,$correo,$contrasenia,$tipousuario,$empresa,$telefono,$puesto,$equipo,$fileName1);
 }
 
   if ($resultado==true) {
