@@ -14,7 +14,13 @@ $prioridad=$_POST['prioridad'];
 $proyecto=$_POST['proyecto'];
 $descripcion=$_POST['descripcion'];
 $fecha=date('Y-m-d H:i:s');
-$user=$_SESSION['username'];
+
+$sqlUser="SELECT fk_username_cliente FROM help_desk_client WHERE id=$cliente";
+$resultadoUser=$link->query($sqlUser);
+if($renglon=mysqli_fetch_array($resultadoUser)){
+$user=$renglon['fk_username_cliente'];
+}
+
 
 //crea nuevo ticket ↓↓↓ 
 $sql="INSERT INTO help_desk_ticket(subject, descrip, ind_asign, sub_date, priority_id_id, project_id_id, status_id_id, type_id_id, user_id_id, activo) VALUES ('$asunto','$descripcion',1,'$fecha','$prioridad','$proyecto','$estatus','$tipo','$user', 1)";
@@ -137,12 +143,16 @@ function selectTipoUsuario(){
 function insertUsuario($nickname,$nombre,$correo,$contrasenia,$tipousuario,$empresa,$telefono,$puesto,$equipo,$fileName1){
 require('../conexion/connect_db.php');
 
-$sql="INSERT INTO help_desk_user_account(username, password, type, correo, activo) VALUES (\"$nickname\",\"$contrasenia\",\"$tipousuario\",\"$correo\",1)";
+$sql="INSERT INTO help_desk_user_account(username, password, type, correo, activo, profile_picture) VALUES (\"$nickname\",\"$contrasenia\",\"$tipousuario\",\"$correo\",1, \"$fileName1\")";
 $resultado1=$link->query($sql);
 var_dump($resultado1);
 echo $equipo;
 switch ($tipousuario) {
   case 1:
+  //admin
+    $sql="INSERT INTO help_desk_admin(name, email, telephone, job_title, fk_username_admin) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\", \"$nickname\")";
+        $resultado2=$link->query($sql);
+        var_dump($resultado2);
   //agente
     $sql="INSERT INTO help_desk_agent(name, email, telephone, job_title, team_id_id, fk_username_agente) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\", 0,\"$nickname\")";
         $resultado2=$link->query($sql);
@@ -154,7 +164,7 @@ switch ($tipousuario) {
     break;
   case 3:
   //agente
-    $sql="INSERT INTO help_desk_agent(name, email, telephone, job_title, team_id_id, fk_username_agente) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\", $equipo,\"$nickname\")";
+    $sql="INSERT INTO help_desk_agent(name, email, telephone, job_title, team_id_id, fk_username_agente,profile_picture) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\", $equipo,\"$nickname\",\"$fileName1\")";
         $resultado2=$link->query($sql);
         var_dump($resultado2);
     break;
@@ -215,6 +225,31 @@ function eliminarTickets($id){
   //require_once('meta.php');
   $sql="UPDATE help_desk_ticket SET activo=0 WHERE id_ticket = $id";
   $resultado=$link->query($sql);
+  $link->close();
+
+  return $resultado;
+}
+
+function quitarAgente($id,$agente){
+  require('../conexion/connect_db.php');
+  //require_once('meta.php');
+    $sql="SELECT id FROM help_desk_agent WHERE name=\"$agente\"";
+    $resultado=$link->query($sql);
+    if ($row=mysqli_fetch_array($resultado)) {
+        $idAgente=$row['id'];
+    }
+
+  $sql="DELETE FROM help_desk_ticket_asign WHERE ticket_id_id = $id AND user_agent_id_id=$idAgente";
+  $resultado=$link->query($sql);
+
+  $sql="SELECT * FROM help_desk_ticket_asign WHERE ticket_id_id = $id";
+  $resultado2=$link->query($sql);
+  $rows=mysqli_num_rows($resultado2); 
+  echo $rows;
+  if($rows==0){
+    $sql="UPDATE help_desk_ticket SET ind_asign=0 WHERE id_ticket=$id";
+    $resultado2=$link->query($sql);
+  }
   $link->close();
 
   return $resultado;
@@ -284,7 +319,7 @@ function verMisTickets($miId){
   }
 function verMisTicketsCliente($miId){
     require('conexion/connect_db.php');
-    $sql="SELECT * FROM help_desk_ticket WHERE user_id_id=\"$miId\" and activo=1 and (status_id_id=1 OR status_id_id=2)";
+    $sql="SELECT * FROM help_desk_ticket WHERE user_id_id=\"$miId\" and activo=1 and (status_id_id=1 OR status_id_id=2 OR status_id_id=3)";
     $resultado=$link->query($sql);
      $link->close();
 
@@ -417,6 +452,7 @@ function selectTicketsTeamTask(){
     return $resultado;
 }
 
+//SELECCIONA EL SEGUIMITNO!!!!!!!
 function selectActividades($id){
   require('conexion/connect_db.php');
   $sql="SELECT * FROM help_desk_ticket_activity TA WHERE TA.ticket_id_id=\"$id\" ORDER BY TA.id ASC"; 
@@ -425,6 +461,19 @@ function selectActividades($id){
 
     return $resultado;
 }
+//SELECCIONA EL SEGUIMIENTO!!!!!!!
+
+//SELECCIONA LAS ACTIVIDADES DE AGENTES Y ADMINS
+function selectSeguimiento($id){
+  require('conexion/connect_db.php');
+  $sql="SELECT * FROM help_desk_activity_agent_admin TA WHERE TA.ticket_id_id=\"$id\" ORDER BY TA.id ASC"; 
+  $resultado=$link->query($sql);
+    $link->close();
+
+    return $resultado;
+}
+
+//SELECCIONA LAS ACTIVIDADES DE AGENTES Y ADMINS
 
 //funcion insertar actividad
 function insertarActividad($actividad,$id,$estado,$user){
@@ -434,6 +483,12 @@ function insertarActividad($actividad,$id,$estado,$user){
   $link->close();
 }
 
+function insertarSeguimiento($actividad,$id,$estado,$user){
+  require('../conexion/connect_db.php');
+  $sql="INSERT INTO `help_desk_activity_agent_admin`(`descrip`, `sub_date`, `time`, `activ_type_id_id`, `ticket_id_id`, `user_id_id`) VALUES (\"$actividad\",NOW(),NOW(),$estado,$id,\"$user\")";
+  echo $resultado=$link->query($sql);
+  $link->close();
+}
 
 function selectModificarUsuario($id){
    require('conexion/connect_db.php');
@@ -510,8 +565,20 @@ function actualizarUsuario($nombre, $nickname,$correo,$contrasenia,$tipousuario,
 function actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cliente,$proyecto,$agentes,$descripcion){
       require('../conexion/connect_db.php');
 
-      $sql="UPDATE help_desk_ticket SET subject=\"$asunto\", descrip=\"$descripcion\",ind_asign=1,priority_id_id=$prioridad,project_id_id=$proyecto,status_id_id=$estatus,type_id_id=$tipoTicket WHERE id_ticket=$aidi";
+        $sqlUser="SELECT fk_username_cliente FROM help_desk_client WHERE id=$cliente";
+        $resultadoUser=$link->query($sqlUser);
+        if($renglon=mysqli_fetch_array($resultadoUser)){
+        $user=$renglon['fk_username_cliente'];
+        }
+
+      //se actualiza el ticket
+      $sql="UPDATE help_desk_ticket SET subject=\"$asunto\", descrip=\"$descripcion\",ind_asign=1,priority_id_id=$prioridad,project_id_id=$proyecto,status_id_id=$estatus,type_id_id=$tipoTicket, user_id_id=\"$user\" WHERE id_ticket=$aidi";
       $resultado=$link->query($sql);
+
+      //se actualiza el cliente en asignacion
+      $sql3="UPDATE help_desk_ticket_asign SET user_client_id_id=$cliente WHERE ticket_id_id=$aidi";
+      $resultado3=$link->query($sql3);
+
 
     $ajent="SELECT user_agent_id_id FROM help_desk_ticket_asign WHERE ticket_id_id=$aidi";
     $ajent2=$link->query($ajent);
@@ -524,8 +591,8 @@ function actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cl
     $i=0;
     foreach ($agentes as $key => $value) {
     if(in_array($value, $arrey, false)){
-      echo $value." = ".$arrey[$i];
-      echo "ñooo";
+      //echo $value." = ".$arrey[$i];
+      //echo "ñooo";
       $i++;
     }
     else{
@@ -533,11 +600,24 @@ function actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cl
     $resultadoId2=$link->query($sql2);
         }
                                         }
+   //echo "Registros actualizados";
+   header("Refresh:2; url=../bandeja.php");
+
+    return $resultado;
+}
+
+function actualizarSeguimientoAgente($aidi,$estatus){
+      require('../conexion/connect_db.php');
+
+      $sql="UPDATE help_desk_ticket SET status_id_id=$estatus WHERE id_ticket=$aidi";
+      $resultado=$link->query($sql);
+
    echo "Registros actualizados";
    header("Refresh:2; url=../bandeja.php");
 
     return $resultado;
 }
+
 
 //encriptaciones
 function encriptar($string, $key) 

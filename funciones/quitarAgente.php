@@ -1,28 +1,13 @@
 <?php
-session_start();
-if($_POST['guardarSeguir']=="1" ){
-require('funciones.php');
-require('meta.php');
-$aidi=$_POST['aidi'];
-$asunto=$_POST['asunto'];
-$tipoTicket=$_POST['tipoTicket'];
-$estatus=$_POST['estatus'];
-$prioridad=$_POST['prioridad'];
-$cliente=$_POST['cliente'];
-$proyecto=$_POST['proyecto'];
-$agentes=$_POST['agentes'];
-$descripcion=$_POST['descripcion'];
-$resultado=actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cliente,$proyecto,$agentes,$descripcion);
-}
+if($_GET['id']!=null && $_GET['id']!='')
+{
+  require_once('funciones.php');
+  require_once('meta.php');
+  $id=$_GET['id'];
+  $agente=$_GET['agente'];
 
-if($_POST['guardarSeguir']=="10" ){
-require('funciones.php');
-require('meta.php');
-$aidi=$_POST['aidi'];
-$estatus=$_POST['estatus'];
-$resultado=actualizarSeguimientoAgente($aidi,$estatus);
-}
-//
+  $resultado=quitarAgente($id,$agente);
+
   if ($resultado==true) {
   ?>
   <a href="#" id="enlace" data-toggle="modal" data-target="#modal-success"></a>
@@ -33,10 +18,10 @@ $resultado=actualizarSeguimientoAgente($aidi,$estatus);
                 <h4 class="modal-title">:3</h4>
               </div>
               <div class="modal-body">
-                <p>¡Seguimiento actualizado!&hellip;</p>
+                <p>¡Agente quitado con exito!&hellip;</p>
               </div>
               <div class="modal-footer">
-                <a href='../mistickets.php' class="btn btn-outline">Aceptar</a>
+                <a href='../teamtask.php' class="btn btn-outline">Aceptar</a>
               </div>
             </div>
             <!-- /.modal-content -->
@@ -59,5 +44,8 @@ $("#enlace").click();
 }else{
   echo "Fallo";
 }
+
+}
+
 
 ?>

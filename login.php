@@ -1,5 +1,7 @@
 <?php
 session_start(); 
+if(!isset($_SESSION['username']))
+{
 ?>
 <!DOCTYPE html>
 <html>
@@ -90,3 +92,9 @@ session_start();
 </script>
 </body>
 </html>
+<?php
+}
+else{
+  header("location: mistickets.php");
+}
+?>

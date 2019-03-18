@@ -516,17 +516,7 @@ if(isset($_SESSION['type'])==1)
 <script src="bower_components/select2/dist/js/select2.full.min.js"></script>
 
 <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
-  });
+
 
   $(function () {
     $('.select2').select2()

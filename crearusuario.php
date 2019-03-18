@@ -1,6 +1,6 @@
 <?php
 session_start(); 
-if(isset($_SESSION['type'])==1)
+if($_SESSION['type']==1)
 {require('funciones/funciones.php');
 ?>
 <!DOCTYPE html>
@@ -185,19 +185,19 @@ if(isset($_SESSION['type'])==1)
                 <!--primer columna-->
                 <div class="form-group col-md-3">
                   <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" name="nombre" placeholder="Nombre">
+                  <input type="text" class="form-control" name="nombre" placeholder="Nombre" required="">
                   <br>
                   <label for="nickname">Nickname</label>
-                  <input type="text" class="form-control" name="nickname" placeholder="Nickname">
+                  <input type="text" class="form-control" name="nickname" placeholder="Nickname" required="">
                   <br>
                   <label for="correo">Correo</label>
-                  <input type="email" class="form-control" name="correo" placeholder="Correo">
+                  <input type="email" class="form-control" name="correo" placeholder="Correo" required="">
                   <br>
                   <label for="contraseña">Contraseña</label>
-                  <input type="password" class="form-control" name="contrasenia" placeholder="Contraseña">
+                  <input type="password" class="form-control" name="contrasenia" placeholder="Contraseña" required="">
                   <br>
                   <label for="contraseña2">Repita Contraseña</label>
-                  <input type="password" class="form-control" name="contrasenia2" placeholder="Repita Contraseña">
+                  <input type="password" class="form-control" name="contrasenia2" placeholder="Repita Contraseña" required="">
                 </div>
                 <!--segunda columna-->
                  <div class="form-group col-md-3">
@@ -213,16 +213,16 @@ if(isset($_SESSION['type'])==1)
                    
                   <br>
                   <label for="telefono">Telefono</label>
-                  <input type="text" class="form-control" name="telefono" placeholder="Telefono">
+                  <input type="text" class="form-control" name="telefono" placeholder="Telefono" required="">
                   <br>
                   <label for="imagen">Fotografia de perfil</label>
-                      <input type="file" name="imagen">
+                      <input type="file" name="imagen" required="">
                   <br>
                  </div>
                  <!--tercer columna DINAMICA-->
                  <div class="form-group col-md-3">
                   <label for="puesto">Puesto</label>
-                  <input type="text" class="form-control" name="puesto" placeholder="Puesto">
+                  <input type="text" class="form-control" name="puesto" placeholder="Puesto" required="">
                   <div id="formdim">
                   </div>
                  </div>

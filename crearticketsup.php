@@ -153,7 +153,7 @@ switch ($_SESSION['type']) {
           </a>
           <ul class="treeview-menu">
             <li class="active"><a href="usuarios.php"><i class="fa fa-circle-o"></i>Usuarios</a></li>
-            <li><a href="profile.php"><i class="fa fa-circle-o"></i>Perfil</a></li>
+            <li><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
           </ul>
         </li>
       </ul>
@@ -166,8 +166,8 @@ switch ($_SESSION['type']) {
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Bandeja de asignacion
-        <small>tickets sin asignar</small>
+        Creación de tickets
+        <small>.</small>
       </h1>
     </section>
 
@@ -477,7 +477,7 @@ require('funciones/funciones.php');
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="profile.php"><i class="fa fa-circle-o"></i>Perfil</a></li>
+            <li><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
           </ul>
         </li>
       </ul>
