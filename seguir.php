@@ -388,43 +388,33 @@ require('funciones/funciones.php');
    <div class="tab-pane" id="movimietos">  
       <ul class="timeline">
               <!-- timeline time label --> 
+              <?php
+                $idTicket=$_GET['id'];
+                $resultadoMov=selectMovimientos($idTicket);
+                while ($renglonMov=mysqli_fetch_array($resultadoMov)){
+                list($fecha, $hora)=explode(" ", $renglonMov['log_date']);
+                ?>
                   <li class="time-label">
-                   <span class="bg-green">
-                    10 Feb. 2016
-                   </span>
+                   <span class="bg-green"><?php echo $fecha; ?></span>
                   </li>
               <!-- /.timeline-label -->
               <!-- timeline item -->
                 <li>
               <!-- timeline icon -->
                <div class="timeline-item">
-                 <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                 <span class="time"><i class="fa fa-clock-o"></i><?php echo $hora;?></span>
 
-                   <h3 class="timeline-header"><a href="#">Support Team</a> ...</h3>
-
-                   <div class="timeline-body">
-                      Movimientos
-                   </div>
-              <div class="timeline-footer">
-                
+                   <h3 class="timeline-header"><?php echo $renglonMov['user_id_id']; ?></h3>
+                   <div class="timeline-body"><?php echo $renglonMov['descrip']." - ". $renglonMov['user_id_id']; ?></div>
+              <div class="timeline-footer">             
             </div>
         </div>
-
       </li>
+      <!--Termino de while-->
+      <?php
+        } 
+      ?>
     </ul>
-    <form role="form" method="post" action="#">
-              <div class="box-body">
-                <div class="form-group col-xs-6">
-                   </div>
-                 <div class="form-group col-xs-12">
-                          <label>Escribe una descripción</label>
-                           <textarea class="form-control" rows="3" placeholder="Descripción ... Movimientos"></textarea>
-                          <div class="box-footer">
-                              <button type="submit" class="btn btn-primary">Guardar</button>
-                          </div>
-                    </div>
-              </div>
-        </form>
    </div>
   </div>
     <!-- END timeline item -->
@@ -861,43 +851,33 @@ case 2:
    <div class="tab-pane" id="movimietos">  
       <ul class="timeline">
               <!-- timeline time label --> 
+                  <?php
+                $idTicket=$_GET['id'];
+                $resultadoMov=selectMovimientos($idTicket);
+                while ($renglonMov=mysqli_fetch_array($resultadoMov)){
+                list($fecha, $hora)=explode(" ", $renglonMov['log_date']);
+                ?>
                   <li class="time-label">
-                   <span class="bg-green">
-                    10 Feb. 2016
-                   </span>
+                   <span class="bg-green"><?php echo $fecha; ?></span>
                   </li>
               <!-- /.timeline-label -->
               <!-- timeline item -->
                 <li>
               <!-- timeline icon -->
                <div class="timeline-item">
-                 <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                 <span class="time"><i class="fa fa-clock-o"></i><?php echo $hora;?></span>
 
-                   <h3 class="timeline-header"><a href="#">Support Team</a> ...</h3>
-
-                   <div class="timeline-body">
-                      Movimientos
-                   </div>
-              <div class="timeline-footer">
-                
+                   <h3 class="timeline-header"><?php echo $renglonMov['user_id_id']; ?></h3>
+                   <div class="timeline-body"><?php echo $renglonMov['descrip']." - ". $renglonMov['user_id_id']; ?></div>
+              <div class="timeline-footer">             
             </div>
         </div>
-
       </li>
+      <!--Termino de while-->
+      <?php
+        } 
+      ?>
     </ul>
-    <form role="form" method="post" action="#">
-              <div class="box-body">
-                <div class="form-group col-xs-6">
-                   </div>
-                 <div class="form-group col-xs-12">
-                          <label>Escribe una descripción</label>
-                           <textarea class="form-control" rows="3" placeholder="Descripción ... Movimientos"></textarea>
-                          <div class="box-footer">
-                              <button type="submit" class="btn btn-primary">Guardar</button>
-                          </div>
-                    </div>
-              </div>
-        </form>
    </div>
   </div>
     <!-- END timeline item -->
@@ -1372,43 +1352,33 @@ case 3:
    <div class="tab-pane" id="movimietos">  
       <ul class="timeline">
               <!-- timeline time label --> 
+                 <?php
+                $idTicket=$_GET['id'];
+                $resultadoMov=selectMovimientos($idTicket);
+                while ($renglonMov=mysqli_fetch_array($resultadoMov)){
+                list($fecha, $hora)=explode(" ", $renglonMov['log_date']);
+                ?>
                   <li class="time-label">
-                   <span class="bg-green">
-                    10 Feb. 2016
-                   </span>
+                   <span class="bg-green"><?php echo $fecha; ?></span>
                   </li>
               <!-- /.timeline-label -->
               <!-- timeline item -->
                 <li>
               <!-- timeline icon -->
                <div class="timeline-item">
-                 <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                 <span class="time"><i class="fa fa-clock-o"></i><?php echo $hora;?></span>
 
-                   <h3 class="timeline-header"><a href="#">Support Team</a> ...</h3>
-
-                   <div class="timeline-body">
-                      Movimientos
-                   </div>
-              <div class="timeline-footer">
-                
+                   <h3 class="timeline-header"><?php echo $renglonMov['user_id_id']; ?></h3>
+                   <div class="timeline-body"><?php echo $renglonMov['descrip']." - ". $renglonMov['user_id_id']; ?></div>
+              <div class="timeline-footer">             
             </div>
         </div>
-
       </li>
+      <!--Termino de while-->
+      <?php
+        } 
+      ?>
     </ul>
-    <form role="form" method="post" action="#">
-              <div class="box-body">
-                <div class="form-group col-xs-6">
-                   </div>
-                 <div class="form-group col-xs-12">
-                          <label>Escribe una descripción</label>
-                           <textarea class="form-control" rows="3" placeholder="Descripción ... Movimientos"></textarea>
-                          <div class="box-footer">
-                              <button type="submit" class="btn btn-primary">Guardar</button>
-                          </div>
-                    </div>
-              </div>
-        </form>
    </div>
   </div>
     <!-- END timeline item -->

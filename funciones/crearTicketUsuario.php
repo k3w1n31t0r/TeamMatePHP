@@ -5,12 +5,12 @@ if(isset($_POST['crearTicket']))
 require_once('../conexion/connect_db.php');
 require_once('meta.php');
 
-$asunto=$_POST['asunto'];
-$tipo=$_POST['tipo'];
-$cliente=$_POST['cliente'];
-$proyecto=$_POST['proyecto'];
+$asunto     =$_POST['asunto'];
+$tipo       =$_POST['tipo'];
+$cliente    =$_POST['cliente'];
+$proyecto   =$_POST['proyecto'];
 $descripcion=$_POST['descripcion'];
-$fecha=date('Y-m-d H:i:s');
+$fecha      =date('Y-m-d H:i:s');
 
 
 //crea nuevo ticket ↓↓↓ 
