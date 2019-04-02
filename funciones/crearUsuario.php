@@ -55,7 +55,7 @@ if(isset($_POST['insertarUsuario'])=="10"){
 
   if ($resultado==true) {
   ?>
-  <a href="#" id="enlace" data-toggle="modal" data-target="#modal-success"></a>
+  <a href="#" id="enlace" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modal-success"></a>
   <div class="modal modal-success fade" id="modal-success">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -75,6 +75,7 @@ if(isset($_POST['insertarUsuario'])=="10"){
         </div>
         <!-- /.modal -->
         <script type="text/javascript">
+          $('#enlace').modal({backdrop: 'static', keyboard: false})
           // definimos lo que queremos hacer en el click primero 
 $("#enlace").click(function() { 
      location.href = this.href; // ir al link 

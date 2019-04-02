@@ -69,7 +69,7 @@ $link->close();
 //MODAL ↓↓↓
 if ($resultado==true && $resultadoId2) {
 	?>
-	<a href="#" id="enlace" data-toggle="modal" data-target="#modal-success"></a>
+	<a href="#" id="enlace" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modal-success"></a>
 	<div class="modal modal-success fade" id="modal-success">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -89,6 +89,7 @@ if ($resultado==true && $resultadoId2) {
         </div>
         <!-- /.modal -->
         <script type="text/javascript">
+          $('#enlace').modal({backdrop: 'static', keyboard: false})
         	// definimos lo que queremos hacer en el click primero 
 $("#enlace").click(function() { 
      location.href = this.href; // ir al link 
@@ -164,6 +165,7 @@ $("#enlace").click();
 
 //update ASIGNAR
 function asignar($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cliente,$proyecto,$agentes,$descripcion){
+   session_start();
    require('../conexion/connect_db.php');
     if($estatus!=3 || $estatus!=4){
       $sql="UPDATE help_desk_ticket SET subject=\"$asunto\", descrip=\"$descripcion\",ind_asign=1,priority_id_id=$prioridad,project_id_id=$proyecto,status_id_id=$estatus,type_id_id=$tipoTicket WHERE id_ticket=$aidi";
@@ -400,6 +402,10 @@ function verMisTicketsCliente($miId){
 
 //SELECT DE LLAMADOS
 
+//Selecciona tickets validos
+
+  
+
 //Select a usuarios/users
 //activo = 1
 function selectUsuarios(){
@@ -445,7 +451,7 @@ function selectImagen($id){
   //Select estados/stats
   function selectEstados(){
     require('conexion/connect_db.php');
-    $sql="SELECT * FROM help_desk_ticket_stats";
+    $sql="SELECT * FROM help_desk_ticket_stats WHERE id!=4";
     $resultado=$link->query($sql);
     $link->close();
 
@@ -466,7 +472,7 @@ function selectImagen($id){
   //Select Ciente
   function selectCliente(){
     require('conexion/connect_db.php');
-    $sql="SELECT * FROM help_desk_client";
+    $sql="SELECT * FROM help_desk_client CL INNER JOIN help_desk_user_account UA ON CL.name=UA.username WHERE UA.activo=1";
     $resultado=$link->query($sql);
     $link->close();
 
@@ -476,7 +482,7 @@ function selectImagen($id){
   //Select  agente
   function selectAgente(){
     require('conexion/connect_db.php');
-    $sql="SELECT id, name FROM help_desk_agent";
+    $sql="SELECT AG.id, AG.name, UA.activo FROM help_desk_agent AG INNER JOIN help_desk_user_account UA ON AG.name=UA.username WHERE UA.activo=1  ";
     $resultado=$link->query($sql);
      $link->close();
 
@@ -654,8 +660,16 @@ function actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cl
         }
 
       //se actualiza el ticket
-      $sql="UPDATE help_desk_ticket SET subject=\"$asunto\", descrip=\"$descripcion\",ind_asign=1,priority_id_id=$prioridad,project_id_id=$proyecto,status_id_id=$estatus,type_id_id=$tipoTicket, user_id_id=\"$user\" WHERE id_ticket=$aidi";
-      $resultado=$link->query($sql);
+      if($estatus==4){
+        $sql="UPDATE help_desk_ticket SET subject=\"$asunto\", descrip=\"$descripcion\",ind_asign=1,priority_id_id=$prioridad,project_id_id=$proyecto,status_id_id=$estatus,type_id_id=$tipoTicket, user_id_id=\"$user\", activo=0 WHERE id_ticket=$aidi";
+          $resultado=$link->query($sql);
+      }
+      else{
+        $sql="UPDATE help_desk_ticket SET subject=\"$asunto\", descrip=\"$descripcion\",ind_asign=1,priority_id_id=$prioridad,project_id_id=$proyecto,status_id_id=$estatus,type_id_id=$tipoTicket, user_id_id=\"$user\" WHERE id_ticket=$aidi";
+          $resultado=$link->query($sql);
+      }
+      
+      //-----------------------
 
 //LOG de actualizacion de ticket
       $sql="INSERT INTO help_desk_ticket_log(descrip, log_date, ticket_id_id, user_id_id) VALUES ('Se actualizaron los datos del ticket', NOW(),'$aidi',\"{$_SESSION['username']}\")";
@@ -676,6 +690,8 @@ function actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cl
       $i++;
     }
     $i=0;
+    if($agentes!=NULL){
+
     foreach ($agentes as $key => $value) {
     if(in_array($value, $arrey, false)){
       //echo $value." = ".$arrey[$i];
@@ -696,9 +712,10 @@ function actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cl
 //LOG de actualizacion de ticket (agregar nuevos agentes)
         }
                                         }
+        }
    //echo "Registros actualizados";
-   header("Refresh:2; url=../bandeja.php");
-
+   //header("Refresh:2; url=../bandeja.php");
+    $link->close();                                    
     return $resultado;
 }
 
@@ -710,7 +727,7 @@ function actualizarSeguimientoAgente($aidi,$estatus){
 
    echo "Registros actualizados";
    header("Refresh:2; url=../bandeja.php");
-
+   $link->close();
     return $resultado;
 }
 

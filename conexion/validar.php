@@ -29,7 +29,7 @@ $sql=("SELECT * FROM help_desk_user_account WHERE correo='$email' and password='
 }
             if($ns==3){
 
-            header("location: /area-repartidores");
+            header("location: ../mistickets.php");
 }
 
             }

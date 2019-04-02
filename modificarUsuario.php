@@ -1,5 +1,8 @@
 <?php
 session_start(); 
+require('funciones/validarUsuario.php');
+$res=validarUsuario($_GET['id']);
+if($ren=mysqli_num_rows($res)!=0){
 switch ($_SESSION['type']) {
   case 1:
 require('funciones/funciones.php');
@@ -355,6 +358,8 @@ break;
 //case cliente//case cliente//case cliente//case cliente//case cliente//case cliente//case cliente
 case 2:
   require('funciones/funciones.php');
+  $id=$_GET['id'];
+  ($_GET['id']!=$_SESSION['username'])? $id=$_SESSION['username']: "";
 ?>
 <!DOCTYPE html>
 <html>
@@ -529,7 +534,7 @@ case 2:
               <div class="box-body">
                 <!--primer columna-->
                 <?php
-                  $id=$_GET['id'];
+                  
                   $usuariosMod=selectModificarUsuario($id);
                   //$tipos    =selectTipoUsuario();
                  if($renglon=mysqli_fetch_array($usuariosMod)) {
@@ -693,6 +698,8 @@ case 2:
 
 case 3:
   require('funciones/funciones.php');
+  $id=$_GET['id'];
+  ($_GET['id']!=$_SESSION['username'])? $id=$_SESSION['username']: "";
 ?>
 <!DOCTYPE html>
 <html>
@@ -866,7 +873,7 @@ case 3:
               <div class="box-body">
                 <!--primer columna-->
                 <?php
-                  $id=$_GET['id'];
+                  //$id=$_GET['id'];
                   $usuariosMod=selectModificarUsuario($id);
                   //$tipos    =selectTipoUsuario();
                  if($renglon=mysqli_fetch_array($usuariosMod)) {
@@ -1033,5 +1040,9 @@ case 3:
 default:
   header("location: login.php");
   break;
+}
+}
+else {
+  header('Location: modificarUsuario.php?id='.$_SESSION['username'].'');
 }
 ?>

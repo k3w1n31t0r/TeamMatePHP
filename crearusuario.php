@@ -154,7 +154,7 @@ if($_SESSION['type']==1)
           </a>
           <ul class="treeview-menu">
             <li  class="active"><a href="usuarios.php"><i class="fa fa-circle-o"></i>Usuarios</a></li>
-            <li><a href="profile.php"><i class="fa fa-circle-o"></i>Perfil</a></li>
+            <li><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
           </ul>
         </li>
       </ul>

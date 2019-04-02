@@ -1,0 +1,8 @@
+#HTID:8757438: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
+#php_value display_errors 1
+Options -Indexes
+Options +FollowSymLinks
+RewriteBase /teammate/
+RewriteEngine on
+RewriteRule ^seguir/([0-9]+)$ seguir.php?id=$1
+# DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:8757438:

@@ -1,5 +1,8 @@
 <?php
 session_start(); 
+require('funciones/validarTicket.php');
+$res=validarTicket($_GET['id']);
+if($ren=mysqli_num_rows($res)!=0){
 switch ($_SESSION['type']) {
   case 1:
 require('funciones/funciones.php');
@@ -182,7 +185,7 @@ require('funciones/funciones.php');
             <!-- form start -->
             <form role="form" method="post" action="funciones/actualizarSeguimiento.php">
               <div class="box-body">
-                <div class="form-group col-xs-6">
+                <div class="form-group col-md-6">
                   <label for="asunto">Asunto</label>
                   <?php
                     $resultado=selectTicketId($_GET['id']);
@@ -193,7 +196,7 @@ require('funciones/funciones.php');
                     }
                   ?>
                 </div>
-                <div class="form-group col-xs-3">
+                <div class="form-group col-md-3">
                   <label for="tipo">Tipo de ticket</label>
                     <select class="form-control" id="tipo" required="" name="tipoTicket">
                        <?php
@@ -204,7 +207,7 @@ require('funciones/funciones.php');
                       ?>
                     </select>
                 </div>
-                <div class="form-group col-xs-3">
+                <div class="form-group col-md-3">
                   <label for="estatus">Estatus</label>
                     <select class="form-control" id="estatus" name="estatus">
                        <?php
@@ -215,7 +218,7 @@ require('funciones/funciones.php');
                       ?>
                     </select>
                 </div>
-                <div class="form-group col-xs-3">
+                <div class="form-group col-md-3">
                   <label for="prioridad">Prioridad</label>
                     <select class="form-control" id="prioridad" name="prioridad">
                       <?php
@@ -226,7 +229,7 @@ require('funciones/funciones.php');
                       ?>
                     </select>
                 </div>
-                <div class="form-group col-xs-3">
+                <div class="form-group col-md-3">
                   <label for="cliente">Cliente</label>
                     <select class="form-control" id="cliente" name="cliente">
                        <?php
@@ -238,7 +241,7 @@ require('funciones/funciones.php');
                       ?>
                     </select>
                 </div>
-                 <div class="form-group col-xs-3">
+                 <div class="form-group col-md-3">
                   <label for="proyecto">Proyecto</label>
                     <select class="form-control" id="proyecto" name="proyecto">
                       <?php
@@ -249,7 +252,7 @@ require('funciones/funciones.php');
                       ?>
                     </select> 
                  </div>
-                 <div class="form-group col-xs-3">
+                 <div class="form-group col-md-3">
                   <label for="agente">Agente</label>
                     <select class="form-control select2" multiple="multiple" name="agentes[]" data-placeholder="Selecciona agentes"
                         style="width: 100%;">
@@ -262,7 +265,7 @@ require('funciones/funciones.php');
                       ?>
                   </select>
                  </div>
-                 <div class="form-group col-xs-12">
+                 <div class="form-group col-md-12">
                   <label>Descripción</label>
                   <?php
                     $resultado=selectTicketId($_GET['id']);
@@ -277,7 +280,7 @@ require('funciones/funciones.php');
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary" value="1" name="guardarSeguir">Guardar</button>
                 &nbsp&nbsp&nbsp&nbsp&nbsp
-                <button type="submit" class="btn btn-danger" value="2">Finalizar</button>
+                <button type="submit" class="btn btn-danger" value="4" name="cerrar">Finalizar</button>
               </div>
             </form>
             <br>
@@ -1486,5 +1489,9 @@ case 3:
 default:
   header("location: login.php");
   break;
+}
+}
+else {
+  header('Location: mistickets.php');
 }
 ?>

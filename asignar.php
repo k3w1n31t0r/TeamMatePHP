@@ -1,5 +1,8 @@
 <?php
 session_start(); 
+require('funciones/validarAsignar.php');
+$res=validarAsignar($_GET['id']);
+if($ren=mysqli_num_rows($res)!=0){
 if(isset($_SESSION['type'])==1)
 {
   require('funciones/funciones.php');
@@ -542,5 +545,9 @@ if(isset($_SESSION['type'])==1)
 }
 else {
   header("location: login.php");
+}
+}
+else {
+  header('Location: bandeja.php');
 }
 ?>
