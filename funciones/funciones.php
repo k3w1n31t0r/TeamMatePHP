@@ -372,7 +372,7 @@ function selectNumeroTicketsTerminados(){
 
 function selectNumeroTicketsCerrados(){
   require('conexion/connect_db.php');
-  $sql="SELECT * FROM help_desk_ticket WHERE ind_asign=1 and activo=1 and (status_id_id=5)";
+  $sql="SELECT * FROM help_desk_ticket WHERE status_id_id=4";
   $resultado=$link->query($sql);
   $numero   =$resultado->num_rows;
      $link->close();

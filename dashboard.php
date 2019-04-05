@@ -2,6 +2,10 @@
 session_start(); 
 if(isset($_SESSION['type'])==1)
 {require('funciones/funciones.php');
+ 					$numeroTotal=selectNumeroTickets(); 
+                    $numeroEnProceso=selectNumeroTicketsEnProceso();
+                    $numeroTerminados=selectNumeroTicketsTerminados();
+                    $numeroCerrados=selectNumeroTicketsCerrados();
 ?>
 <!DOCTYPE html>
 <html>
@@ -179,43 +183,74 @@ if(isset($_SESSION['type'])==1)
      	
           <!-- small box -->
           <div class="row">
-          <div class="col-lg-4 col-xs-6">
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <?php $numero=selectNuevosTickets();?>
-              <h3> <?php echo $numero; ?></h3>
+          	<div class="col-md-3">
+          		<div class="small-box bg-yellow">
+            		<div class="inner">
+		              <?php $numero=selectNuevosTickets();?>
+		              <h3> <?php echo $numero; ?></h3>
 
-              <p>Nuevos tickets</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-bag"></i>
-            </div>
-            <a href="bandeja.php" class="small-box-footer">Ir a Bandeja <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
+		              <p>Nuevos tickets</p>
+            		</div>
+           		 <div class="icon">
+              		<i class="ion glyphicon-envelope"></i>
+           		 </div>
+            	 <a href="bandeja.php" class="small-box-footer">Ir a Bandeja <i class="fa fa-arrow-circle-right"></i></a>
+         	 </div>
            </div>
+           <div class="col-md-3">
+          		<div class="small-box bg-green">
+            		<div class="inner">
+		              <?php $numeroEnProceso=selectNumeroTicketsEnProceso();?>
+		              <h3> <?php echo $numeroEnProceso; ?></h3>
+
+		              <p>Tickets en proceso</p>
+            		</div>
+           		 <div class="icon">
+              		<i class="ion fa-commenting-o"></i>
+           		 </div>
+            	 <a href="teamtask.php" class="small-box-footer">Ir tareas de equipo <i class="fa fa-arrow-circle-right"></i></a>
+         	 </div>
+           </div>
+           <div class="col-md-3">
+          		<div class="small-box bg-aqua">
+            		<div class="inner">
+		              <?php $numeroTerminados=selectNumeroTicketsTerminados();?>
+		              <h3> <?php echo $numeroTerminados; ?></h3>
+
+		              <p>Tickets terminados</p>
+            		</div>
+           		 <div class="icon">
+              		<i class="glyphicon glyphicon-ok"></i>
+           		 </div>
+            	 <a href="teamtask.php" class="small-box-footer">Ir tareas de equipo <i class="fa fa-arrow-circle-right"></i></a>
+         	 </div>
+           </div>
+           <div class="col-md-3">
+          		<div class="small-box bg-red">
+            		<div class="inner">
+		              <?php $numeroCerrados=selectNumeroTicketsCerrados();?>
+		              <h3> <?php echo $numeroCerrados; ?></h3>
+
+		              <p>Eliminados y cerrados</p>
+            		</div>
+           		 <div class="icon">
+              		<i class="glyphicon glyphicon-remove"></i>
+           		 </div>
+            	 <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+         	 </div>
+           </div>
+       </div>
 
           <!-- small box -->
           <!-- i do not-->
-         <div class="row">
+       <div class="row">
         <div class="col-md-12">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Reporte de tickets</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-wrench"></i></button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                  </ul>
-                </div>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
             </div>
@@ -223,26 +258,17 @@ if(isset($_SESSION['type'])==1)
             <div class="box-body">
               <div class="row">
                 <div class="col-md-8">
-                  <p class="text-center">
-                    <strong>Fecha del dia de hoy</strong>
-                  </p>
-
-                  <div class="chart">
-                    <!-- Sales Chart Canvas -->
-                    <canvas id="salesChart" style="height: 180px;"></canvas>
-                  </div>
+                 
+                 
                   <!-- /.chart-responsive -->
                 </div>
                 <!-- /.col -->
-                <div class="col-md-4">
+                <div class="col-md-12">
                   <p class="text-center">
                     <strong>Estado de tickets</strong>
                   </p>
                   <?php 
-                    $numeroTotal=selectNumeroTickets(); 
-                    $numeroEnProceso=selectNumeroTicketsEnProceso();
-                    $numeroTerminados=selectNumeroTicketsTerminados();
-                    $numeroCerrados=selectNumeroTicketsCerrados();
+                   
                     if($numero>0){$porcentajeNuevos=($numero*100)/$numeroTotal;}
                     if($numeroEnProceso>0){$porcentajeProceso=($numeroEnProceso*100)/$numeroTotal;}
                     if($numeroTerminados>0){$porcentajeTerminados=($numeroTerminados*100)/$numeroTotal;}
