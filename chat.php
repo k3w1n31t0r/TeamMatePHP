@@ -1,15 +1,15 @@
 <?php
 session_start(); 
-if($_SESSION['type']==1)
-{
-require('funciones/funciones.php');
+switch ($_SESSION['type']) {
+  case 2:
+    require('funciones/funciones.php');
 ?>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>TeamMate | Bandeja </title>
+  <title>TeamMate | Mis tickets</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -56,17 +56,15 @@ require('funciones/funciones.php');
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-
       </a>
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
-          
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <?php $imagen=selectImagen($_SESSION['username']);
+                        <?php $imagen=selectImagen($_SESSION['username']);
                     if ($imagen2=mysqli_fetch_array($imagen)) {
                         $img=$imagen2['profile_picture'];
                     }
@@ -96,6 +94,7 @@ require('funciones/funciones.php');
               </li>
             </ul>
           </li>
+          <!-- Control Sidebar Toggle Button -->
         </ul>
       </div>
 
@@ -115,6 +114,15 @@ require('funciones/funciones.php');
         </div>
       </div>
       <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Buscar...">
+          <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -127,11 +135,14 @@ require('funciones/funciones.php');
             </span>
           </a>
          <ul class="treeview-menu">
-            <li><a href="dashboard.php"><i class="fa fa-circle-o"></i>Supervisor</a></li>
-            <li  class="active"><a href="bandeja.php"><i class="fa fa-circle-o"></i>Bandeja de asignacion</a></li>
-            <li><a href="teamtask.php"><i class="fa fa-circle-o"></i>Tareas de equipo</a></li>
             <li><a href="mistickets.php"><i class="fa fa-circle-o"></i>Mis tickets</a></li>
             <li><a href="crearticketsup.php"><i class="fa fa-circle-o"></i>Crear ticket</a></li>
+            <li  class="active">
+              <a href="chat.php">
+                <i class="fa fa-comment"></i><span>Chat Bot</span>
+                </a>
+
+            </li>
           </ul>
         </li>
 
@@ -143,7 +154,6 @@ require('funciones/funciones.php');
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="usuarios.php"><i class="fa fa-circle-o"></i>Usuarios</a></li>
             <li><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
           </ul>
         </li>
@@ -157,77 +167,101 @@ require('funciones/funciones.php');
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Bandeja de asignacion
-        <small>tickets sin asignar</small>
+        Chat
+        <small>Bot</small>
       </h1>
     </section>
 
     <!-- Main content -->
     <section class="content">
       <div class="row">
-        <div class="col-xs-12">        
+        <div class="col-md-12">        
           <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Bandeja de entrada</h3>
-            </div>
             <!-- /.box-header -->
-            <div class="box-body table-responsive">
-              <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Asunto</th>
-                  <th>Descripción</th>
-                  <th>Empresa</th>
-                  <th>Remitente</th>
-                  <th>Proyecto</th>
-                  <th>Asignar agente</th>
-                </tr>
-                </thead>
-                <tbody>       
-                <?php
-                 $resultado=selectTickets();
-                 while ($renglon=mysqli_fetch_array($resultado)){
-                  $id=$renglon['id_ticket'];
-                ?>                   
-                <tr>
-                  <td><?php echo $renglon['id_ticket'];?></td>
-                  <td><?php echo $renglon['subject'];?></td>
-                  <td><?php echo $renglon['descrip'];?> </td>
-                  <td><?php echo $renglon['name'];?></td>
-                  <td><?php echo $renglon['user_id_id'];?></td>
-                  <td><?php echo $renglon['descrip_p'];?></td>
-                  <td>
-                    <div  class="col-xs-10">
-                      <div class="btn-group">
-                  <?php echo '<button type=button class=btn btn-sm onclick="document.location.href=\'asignar.php?id='.$id.'\'">Asignar</button>';?>
-                  <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
-                    <?php echo '<li><a href=funciones/eliminarTicket.php?id="'.$id.'" onclick="return confirmar()">Borrar</a></li>' ?> 
-                  </ul>
-                </div>
-                    </div>
-                  </td>
-                </tr>      
-                <?php
-                }
-                ?>                                  
-                </tbody>
-                <tfoot>
-                <tr>
-                  <th>ID</th>
-                  <th>Asunto</th>
-                  <th>Descripción</th>
-                  <th>Empresa</th>
-                  <th>Remitente</th>
-                  <th>Proyecto</th>
-                  <th>Asignar agente</th>
-                </tr>
-                </tfoot>
-              </table>
+
+            <div class="box-body">
+                      <div class="box box-danger direct-chat direct-chat-danger">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">Direct Chat</h3>
+                          <div class="box-tools pull-right">
+                            <span data-toggle="tooltip" title="3 New Messages" class="badge bg-red">3</span>
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <!-- In box-tools add this button if you intend to use the contacts pane -->
+                            <button class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                          </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                          <!-- Conversations are loaded here -->
+                          <div class="direct-chat-messages">
+                            <!-- Message. Default to the left -->
+                            <div class="direct-chat-msg">
+                              <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-left">Alexander Pierce</span>
+                                <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                              </div>
+                              <!-- /.direct-chat-info -->
+                              <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image">
+                              <!-- /.direct-chat-img -->
+                              <div class="direct-chat-text">
+                                Is this template really for free? That's unbelievable!
+                              </div>
+                              <!-- /.direct-chat-text -->
+                            </div>
+                            <!-- /.direct-chat-msg -->
+
+                            <!-- Message to the right -->
+                            <div class="direct-chat-msg right">
+                              <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-right">Sarah Bullock</span>
+                                <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
+                              </div>
+                              <!-- /.direct-chat-info -->
+                              <img class="direct-chat-img" src="dist/img/user3-128x128.jpg" alt="message user image">
+                              <!-- /.direct-chat-img -->
+                              <div class="direct-chat-text">
+                                You better believe it!
+                              </div>
+                              <!-- /.direct-chat-text -->
+                            </div>
+                            <!-- /.direct-chat-msg -->
+                          </div>
+                          <!--/.direct-chat-messages-->
+
+                          <!-- Contacts are loaded here -->
+                          <div class="direct-chat-contacts">
+                            <ul class="contacts-list">
+                              <li>
+                                <a href="#">
+                                  <img class="contacts-list-img" src="dist/img/user1-128x128.jpg" alt="Contact Avatar">
+                                  <div class="contacts-list-info">
+                                    <span class="contacts-list-name">
+                                      Count Dracula
+                                      <small class="contacts-list-date pull-right">2/28/2015</small>
+                                      </span>
+                                    <span class="contacts-list-msg">How have you been? I was...</span>
+                                  </div>
+                                  <!-- /.contacts-list-info -->
+                                </a>
+                              </li>
+                              <!-- End Contact Item -->
+                            </ul>
+                            <!-- /.contatcts-list -->
+                          </div>
+                          <!-- /.direct-chat-pane -->
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                          <div class="input-group">
+                            <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                            <span class="input-group-btn">
+                                      <button type="button" class="btn btn-danger btn-flat">Send</button>
+                            </span>
+                          </div>
+                        </div>
+                        <!-- /.box-footer-->
+                      </div>
             </div>
             <!-- /.box-body -->
           </div>
@@ -236,9 +270,11 @@ require('funciones/funciones.php');
         <!-- /.col -->
       </div>
       <!-- /.row -->
+
     </section>
     <!-- /.content -->
   </div>
+
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -247,7 +283,10 @@ require('funciones/funciones.php');
     <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
     reserved.
   </footer>
-</div>
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
 <!-- ./wrapper -->
 
 <!-- jQuery 3 -->
@@ -283,24 +322,13 @@ require('funciones/funciones.php');
     })
   })
 </script>
-<script>
-function confirmar()
-{
-  if(confirm('¿Estas seguro que quieres eliminar este Ticket?'))
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-</script>
 </body>
 </html>
-<?php
-}
-else{
-  header("location: login.php");
+<?php  
+    break;
+
+  default:
+    header("location: login.php");
+    break;
 }
 ?>

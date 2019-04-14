@@ -119,15 +119,6 @@ require('funciones/funciones.php');
         </div>
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -280,7 +271,7 @@ require('funciones/funciones.php');
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary" value="1" name="guardarSeguir">Guardar</button>
                 &nbsp&nbsp&nbsp&nbsp&nbsp
-                <button type="submit" class="btn btn-danger" value="4" name="cerrar">Finalizar</button>
+                <button type="submit" class="btn btn-danger" value="4" name="cerrar" onclick="return confirmar()">Finalizar</button>
               </div>
             </form>
             <br>
@@ -324,7 +315,7 @@ require('funciones/funciones.php');
         } 
       ?>
     </ul>
-        <form id="frmajax" role="form" method="post">
+        <form action="#!" id="frmajax" role="form" method="post">
               <div class="box-body">
                 <div class="form-group col-xs-6">
                     <input type="hidden" name="id" value=<?php echo $aidi;?> >
@@ -371,7 +362,7 @@ require('funciones/funciones.php');
         } 
       ?>
     </ul>
-    <form id="frmajax2" role="form" method="post" action="#historial">
+    <form id="frmajax2" role="form" method="post" action="#!">
               <div class="box-body">
                   <div class="form-group col-xs-6">
                     <input type="hidden" name="id" value=<?php echo $aidi;?> >
@@ -456,6 +447,19 @@ require('funciones/funciones.php');
 <!-- page script -->
 <!-- Select2 -->
 <script src="bower_components/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+    function confirmar()
+{
+  if(confirm('¿Estas seguro que desea finalizar este Ticket?'))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+</script>
 <script>
   $(function () {
     $('#example1').DataTable()
@@ -491,12 +495,9 @@ require('funciones/funciones.php');
         type:"POST",
         url:"funciones/crearActividad.php",
         data:datos,
-        success:function(r){
-         return false;
+        success:function(data){
         }
       });
-
-      
     });
   });
 
@@ -639,15 +640,6 @@ case 2:
         </div>
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -662,6 +654,7 @@ case 2:
          <ul class="treeview-menu">
             <li class="active"><a href="mistickets.php"><i class="fa fa-circle-o"></i>Mis tickets</a></li>
             <li><a href="crearticketsup.php"><i class="fa fa-circle-o"></i>Crear ticket</a></li>
+            <li><a href="chat.php"><i class="fa fa-comment"></i>Chat Bot</a></li>
           </ul>
         </li>
 
@@ -1087,15 +1080,6 @@ case 3:
         </div>
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -1243,7 +1227,7 @@ case 3:
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary" value="10" name="guardarSeguir">Guardar</button>
                 &nbsp&nbsp&nbsp&nbsp&nbsp
-                <button type="submit" class="btn btn-danger" value="2">Finalizar</button>
+
               </div>
             </form>
             <br>
@@ -1420,6 +1404,19 @@ case 3:
 <!-- page script -->
 <!-- Select2 -->
 <script src="bower_components/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+    function confirmar(){
+      if(confirm('¿Estas seguro que desea finalizar este Ticket?'))
+            {
+              return true;
+            }
+            else
+            {
+              return false;
+            }
+    }
+</script>
+
 <script>
   $(function () {
     $('#example1').DataTable()

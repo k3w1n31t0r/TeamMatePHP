@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set("America/Mexico_City");
 //CREA TICKET COMO ADMINISTRADOR ↓↓↓ 
 if(isset($_POST['crearTicket']))
 {session_start();
@@ -13,7 +14,9 @@ $estatus=$_POST['estatus'];
 $prioridad=$_POST['prioridad'];
 $proyecto=$_POST['proyecto'];
 $descripcion=$_POST['descripcion'];
-//$fecha=date('Y-m-d H:i:s');
+
+$fecha=date('Y-m-d H:i:s');
+$expira=date("Y-m-d",strtotime($fecha."+ 30 days")); 
 
 $sqlUser="SELECT fk_username_cliente FROM help_desk_client WHERE id=$cliente";
 $resultadoUser=$link->query($sqlUser);
@@ -23,7 +26,7 @@ $user=$renglon['fk_username_cliente'];
 
 
 //crea nuevo ticket ↓↓↓ 
-$sql="INSERT INTO help_desk_ticket(subject, descrip, ind_asign, sub_date, priority_id_id, project_id_id, status_id_id, type_id_id, user_id_id, activo) VALUES ('$asunto','$descripcion',1,NOW(),'$prioridad','$proyecto','$estatus','$tipo','$user', 1)";
+$sql="INSERT INTO help_desk_ticket(subject, descrip, ind_asign, sub_date, priority_id_id, project_id_id, status_id_id, type_id_id, user_id_id, activo, due_date) VALUES (\"$asunto\",\"$descripcion\",1,NOW(),'$prioridad','$proyecto','$estatus','$tipo','$user', 1, '$expira')";
 $resultado=$link->query($sql);
 
 $obtenerUltimoId="SELECT id_ticket from help_desk_ticket WHERE id_ticket=(SELECT MAX(id_ticket)FROM help_desk_ticket)";
@@ -215,7 +218,6 @@ require('../conexion/connect_db.php');
 $sql="INSERT INTO help_desk_user_account(username, password, type, correo, activo, profile_picture) VALUES (\"$nickname\",\"$contrasenia\",\"$tipousuario\",\"$correo\",1, \"$fileName1\")";
 $resultado1=$link->query($sql);
 var_dump($resultado1);
-echo $equipo;
 switch ($tipousuario) {
   case 1:
   //admin
@@ -233,13 +235,13 @@ switch ($tipousuario) {
     break;
   case 3:
   //agente
-    $sql="INSERT INTO help_desk_agent(name, email, telephone, job_title, team_id_id, fk_username_agente,profile_picture) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\", $equipo,\"$nickname\",\"$fileName1\")";
+    $sql="INSERT INTO help_desk_agent(name, email, telephone, job_title, team_id_id, fk_username_agente) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\", $equipo,\"$nickname\")";
         $resultado2=$link->query($sql);
         var_dump($resultado2);
     break;
   case 2:
   //cliente
-    $sql="INSERT INTO help_desk_client(name, email, telephone, job_title, profile_picture, company_id_id, fk_username_cliente) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\",\"$fileName1\",\"$empresa\",\"$nickname\")";
+    $sql="INSERT INTO help_desk_client(name, email, telephone, job_title, company_id_id, fk_username_cliente) VALUES (\"$nombre\",\"$correo\",\"$telefono\",\"$puesto\",\"$empresa\",\"$nickname\")";
         $resultado2=$link->query($sql);
         var_dump($resultado2);
     break;
@@ -292,41 +294,68 @@ function eliminarUsuarios($id){
 function eliminarTickets($id){
   require('../conexion/connect_db.php');
   //require_once('meta.php');
-  $sql="UPDATE help_desk_ticket SET activo=0 WHERE id_ticket = $id";
+  $sql="UPDATE help_desk_ticket SET activo=0 WHERE id_ticket = $id and ind_asign=0";
   $resultado=$link->query($sql);
   $link->close();
 
   return $resultado;
 }
 
+function eliminarTicketsCuenta($id){
+  require('../conexion/connect_db.php');
+  //require_once('meta.php');
+  $sql="SELECT id_ticket FROM help_desk_ticket WHERE id_ticket = $id and ind_asign=0";
+  $resultado=$link->query($sql);
+  $link->close();
+
+  return $resultado;
+}
+
+
 function quitarAgente($id,$agente){
   require('../conexion/connect_db.php');
   //require_once('meta.php');
     $sql="SELECT id FROM help_desk_agent WHERE name=\"$agente\"";
-    $resultado=$link->query($sql);
-    if ($row=mysqli_fetch_array($resultado)) {
-        $idAgente=$row['id'];
-    }
-
-  $sql="DELETE FROM help_desk_ticket_asign WHERE ticket_id_id = $id AND user_agent_id_id=$idAgente";
-  $resultado=$link->query($sql);
-
-//LOG de quitar agentes
-  $sql="INSERT INTO help_desk_ticket_log(descrip, log_date, ticket_id_id, user_id_id) VALUES ('Se quito el agente', NOW(),'$id','$agente')";
-  $link->query($sql);
-//LOG de quitar agentes
-
-  $sql="SELECT * FROM help_desk_ticket_asign WHERE ticket_id_id = $id";
-  $resultado2=$link->query($sql);
-  $rows=mysqli_num_rows($resultado2); 
-  echo $rows;
-  if($rows==0){
-    $sql="UPDATE help_desk_ticket SET ind_asign=0 WHERE id_ticket=$id";
     $resultado2=$link->query($sql);
-  }
-  $link->close();
+    if(mysqli_num_rows($resultado2)!=0){
 
-  return $resultado;
+            if ($row=mysqli_fetch_array($resultado2)) {
+                $idAgente=$row['id'];
+            }
+          //comprobamos si existen
+          $sql="SELECT ticket_id_id FROM help_desk_ticket_asign WHERE ticket_id_id=$id";
+          $resultado3=$link->query($sql);
+          //comprobamos si existen
+          if(mysqli_num_rows($resultado3)!=0){
+                  $sql="DELETE FROM help_desk_ticket_asign WHERE ticket_id_id = $id AND user_agent_id_id=$idAgente";
+                  $resultado=$link->query($sql);
+
+                //LOG de quitar agentes
+                  $sql="INSERT INTO help_desk_ticket_log(descrip, log_date, ticket_id_id, user_id_id) VALUES ('Se quito el agente', NOW(),'$id','$agente')";
+                  $link->query($sql);
+                //LOG de quitar agentes
+
+                  $sql="SELECT * FROM help_desk_ticket_asign WHERE ticket_id_id = $id";
+                  $resultado2=$link->query($sql);
+                  $rows=mysqli_num_rows($resultado2); 
+                  echo $rows;
+                  if($rows==0){
+                    $sql="UPDATE help_desk_ticket SET ind_asign=0 WHERE id_ticket=$id";
+                    $resultado2=$link->query($sql);
+                  }
+                  $link->close();
+
+                  return $resultado;
+                           }
+                           else{
+                            $link->close();
+                            header("location: ../teamtask.php");
+                                }
+                         }        
+      else{
+        $link->close();
+        header("location: ../teamtask.php");
+      }
 }
 //⇑
 //ELIMINACIONES/DELETE FUNCIONES
@@ -334,7 +363,7 @@ function quitarAgente($id,$agente){
 //CONTADORES DE TICKETS ↓↓↓ ↓↓↓
 function selectNuevosTickets(){
   require('conexion/connect_db.php');
-  $sql="SELECT * FROM help_desk_ticket WHERE ind_asign=0 and activo=1 and (status_id_id=1)";
+  $sql="SELECT * FROM help_desk_ticket WHERE ind_asign=0 and activo=1";
   $resultado=$link->query($sql);
   $numero   =$resultado->num_rows;
      $link->close();
@@ -343,7 +372,7 @@ function selectNuevosTickets(){
 }
 function selectNumeroTickets(){
   require('conexion/connect_db.php');
-  $sql="SELECT * FROM help_desk_ticket WHERE activo=1 and(status_id_id!=3 and status_id_id!=4)";
+  $sql="SELECT * FROM help_desk_ticket /*WHERE activo=1 and(status_id_id!=3 and status_id_id!=4)*/";
   $resultado=$link->query($sql);
   $numero   =$resultado->num_rows;
      $link->close();
@@ -352,7 +381,7 @@ function selectNumeroTickets(){
 }
 function selectNumeroTicketsEnProceso(){
   require('conexion/connect_db.php');
-  $sql="SELECT * FROM help_desk_ticket WHERE activo=1 and (status_id_id=2)";
+  $sql="SELECT * FROM help_desk_ticket WHERE ind_asign=1 and activo=1 and status_id_id=2";
   $resultado=$link->query($sql);
   $numero   =$resultado->num_rows;
      $link->close();
@@ -362,7 +391,7 @@ function selectNumeroTicketsEnProceso(){
 
 function selectNumeroTicketsTerminados(){
   require('conexion/connect_db.php');
-  $sql="SELECT * FROM help_desk_ticket WHERE ind_asign=1 and activo=1 and (status_id_id=3)";
+  $sql="SELECT * FROM help_desk_ticket WHERE ind_asign=1 and activo=1 and status_id_id=3";
   $resultado=$link->query($sql);
   $numero   =$resultado->num_rows;
      $link->close();
@@ -372,7 +401,25 @@ function selectNumeroTicketsTerminados(){
 
 function selectNumeroTicketsCerrados(){
   require('conexion/connect_db.php');
-  $sql="SELECT * FROM help_desk_ticket WHERE status_id_id=4";
+  $sql="SELECT * FROM help_desk_ticket WHERE ind_asign=1 and activo=1 and status_id_id=4";
+  $resultado=$link->query($sql);
+  $numero   =$resultado->num_rows;
+     $link->close();
+
+    return $numero;
+}
+function selectNumeroTicketsAbiertos(){
+  require('conexion/connect_db.php');
+  $sql="SELECT * FROM help_desk_ticket WHERE status_id_id=1 and ind_asign=1 and activo=1";
+  $resultado=$link->query($sql);
+  $numero   =$resultado->num_rows;
+     $link->close();
+
+    return $numero;
+}
+function selectNumeroTicketsEliminados(){
+  require('conexion/connect_db.php');
+  $sql="SELECT * FROM help_desk_ticket WHERE activo=0";
   $resultado=$link->query($sql);
   $numero   =$resultado->num_rows;
      $link->close();
@@ -430,7 +477,7 @@ function selectImagen($id){
 //Select company
   function selectCompanies(){
     require('conexion/connect_db.php');
-    $sql="SELECT id, name FROM help_desk_company";
+    $sql="SELECT id, name FROM help_desk_company WHERE id!=0";
     $resultado=$link->query($sql);
      $link->close();
 
@@ -499,9 +546,19 @@ function selectImagen($id){
     return $resultado;
   }
 
+   function selectProyectoCliente($idCliente){
+    require('conexion/connect_db.php');
+    $sql="SELECT PRO.id, PRO.descrip_p FROM help_desk_company_project CP INNER JOIN help_desk_client CLI ON CLI.company_id_id=CP.company_id_id INNER JOIN help_desk_project PRO on PRO.id=CP.project_id_id WHERE CLI.fk_username_cliente=\"$idCliente\"";
+    $resultado=$link->query($sql);
+     $link->close();
+
+    return $resultado;
+  }
+
+
   function selectEquipo(){
     require('conexion/connect_db.php');
-    $sql="SELECT * FROM help_desk_team";
+    $sql="SELECT * FROM help_desk_team WHERE id!=0";
     $resultado=$link->query($sql);
      $link->close();
 
@@ -612,9 +669,9 @@ function selectModificarUsuario($id){
     return $resultado;
 }
 
-function actualizarUsuario($nombre, $nickname,$correo,$contrasenia,$tipousuario,$telefono,$puesto,$equipo,$empresa,$idusuario){
+function actualizarUsuario($nombre, $nickname,$correo,$contrasenia,$tipousuario,$telefono,$puesto,$equipo,$empresa,$idusuario,$fileName1){
   require('../conexion/connect_db.php');
-  $sql="UPDATE help_desk_user_account SET username=\"$nickname\",password=\"$contrasenia\",correo=\"$correo\" WHERE username=\"$idusuario\"";
+  $sql="UPDATE help_desk_user_account SET username=\"$nickname\",password=\"$contrasenia\",correo=\"$correo\", profile_picture=\"$fileName1\" WHERE username=\"$idusuario\"";
   $resultado=$link->query($sql);
   var_dump($resultado);
 
@@ -660,8 +717,8 @@ function actualizarSeguimiento($aidi,$asunto,$tipoTicket,$estatus,$prioridad,$cl
         }
 
       //se actualiza el ticket
-      if($estatus==4){
-        $sql="UPDATE help_desk_ticket SET subject=\"$asunto\", descrip=\"$descripcion\",ind_asign=1,priority_id_id=$prioridad,project_id_id=$proyecto,status_id_id=$estatus,type_id_id=$tipoTicket, user_id_id=\"$user\", activo=0 WHERE id_ticket=$aidi";
+      if($estatus==4 || $estatus==3){
+        $sql="UPDATE help_desk_ticket SET subject=\"$asunto\", descrip=\"$descripcion\",ind_asign=1,priority_id_id=$prioridad,project_id_id=$proyecto,status_id_id=$estatus,type_id_id=$tipoTicket, user_id_id=\"$user\", close_date=NOW() WHERE id_ticket=$aidi";
           $resultado=$link->query($sql);
       }
       else{

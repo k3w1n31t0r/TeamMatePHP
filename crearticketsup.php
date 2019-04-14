@@ -115,15 +115,6 @@ switch ($_SESSION['type']) {
         </div>
 </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -443,15 +434,6 @@ require('funciones/funciones.php');
         </div>
 </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -466,6 +448,7 @@ require('funciones/funciones.php');
          <ul class="treeview-menu">
             <li><a href="mistickets.php"><i class="fa fa-circle-o"></i>Mis tickets</a></li>
             <li class="active"><a href="crearticketsup.php"><i class="fa fa-circle-o"></i>Crear ticket</a></li>
+            <li><a href="chat.php"><i class="fa fa-comment"></i>Chat Bot</a></li>
           </ul>
         </li>
 
@@ -530,7 +513,7 @@ require('funciones/funciones.php');
                   <label for="proyecto">Proyecto</label>
                     <select class="form-control" id="proyecto" name="proyecto">
                       <?php
-                          $resultado=selectProyecto();
+                          $resultado=selectProyectoCliente($_SESSION['username']);
                            while ($renglon=mysqli_fetch_array($resultado)){                                           
                             echo "<option value={$renglon['id']}>{$renglon['descrip_p']}</option>";
                         }

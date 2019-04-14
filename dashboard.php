@@ -1,11 +1,13 @@
 <?php
 session_start(); 
-if(isset($_SESSION['type'])==1)
+if($_SESSION['type']==1)
 {require('funciones/funciones.php');
  					$numeroTotal=selectNumeroTickets(); 
-                    $numeroEnProceso=selectNumeroTicketsEnProceso();
-                    $numeroTerminados=selectNumeroTicketsTerminados();
-                    $numeroCerrados=selectNumeroTicketsCerrados();
+                    $numeroEnProceso  =selectNumeroTicketsEnProceso();
+                    $numeroTerminados =selectNumeroTicketsTerminados();
+                    $numeroCerrados   =selectNumeroTicketsCerrados();
+                    $numeroAbiertos   =selectNumeroTicketsAbiertos();
+                    $numeroEliminados =selectNumeroTicketsEliminados();
 ?>
 <!DOCTYPE html>
 <html>
@@ -119,16 +121,7 @@ if(isset($_SESSION['type'])==1)
   
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat">
-                  <i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
+
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -231,7 +224,7 @@ if(isset($_SESSION['type'])==1)
 		              <?php $numeroCerrados=selectNumeroTicketsCerrados();?>
 		              <h3> <?php echo $numeroCerrados; ?></h3>
 
-		              <p>Eliminados y cerrados</p>
+		              <p>Tickets cerrados</p>
             		</div>
            		 <div class="icon">
               		<i class="glyphicon glyphicon-remove"></i>
@@ -273,6 +266,8 @@ if(isset($_SESSION['type'])==1)
                     if($numeroEnProceso>0){$porcentajeProceso=($numeroEnProceso*100)/$numeroTotal;}
                     if($numeroTerminados>0){$porcentajeTerminados=($numeroTerminados*100)/$numeroTotal;}
                     if($numeroCerrados>0){$porcentajeCerrados=($numeroCerrados*100)/$numeroTotal;}
+                    if($numeroAbiertos>0){$porcentajeAbiertos=($numeroAbiertos*100)/$numeroTotal;}
+                    if($numeroEliminados>0){$porcentajeEliminados=($numeroEliminados*100)/$numeroTotal;}
                   ?>
                   <div class="progress-group">
                     <span class="progress-text">Tickets cerrados</span>
@@ -306,7 +301,26 @@ if(isset($_SESSION['type'])==1)
                     <div class="progress sm">
                       <div class="progress-bar progress-bar-green" style="width: <?php echo $porcentajeProceso."%"?>"></div>
                     </div>
+                  </div>                
+                  <!-- /.progress-group -->
+                  <!-- /.progress-group -->
+                  <div class="progress-group">
+                    <span class="progress-text">Tickets abiertos</span>
+                    <span class="progress-number"><b><?php echo $numeroAbiertos; ?></b>/<?php echo $numeroTotal; ?></span>
+
+                    <div class="progress sm">
+                      <div class="progress-bar bg-teal" style="width: <?php echo $porcentajeAbiertos."%"?>"></div>
+                    </div>
                   </div>
+                  <div class="progress-group">
+                    <span class="progress-text">Tickets Eliminados</span>
+                    <span class="progress-number"><b><?php echo $numeroEliminados; ?></b>/<?php echo $numeroTotal; ?></span>
+
+                    <div class="progress sm">
+                      <div class="progress-bar bg-black" style="width: <?php echo $porcentajeEliminados."%"?>"></div>
+                    </div>
+                  </div>
+                  
                   <!-- /.progress-group -->
  
                     </div>

@@ -117,15 +117,6 @@ require('funciones/funciones.php');
         </div>
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -154,8 +145,8 @@ require('funciones/funciones.php');
             </span>
           </a>
           <ul class="treeview-menu">
-            <li  class="active"><a href="usuarios.php"><i class="fa fa-circle-o"></i>Usuarios</a></li>
-            <li><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
+            <li><a href="usuarios.php"><i class="fa fa-circle-o"></i>Usuarios</a></li>
+            <li class="active"><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
           </ul>
         </li>
       </ul>
@@ -181,7 +172,7 @@ require('funciones/funciones.php');
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" method="post" action="funciones/modificarUsuario.php">
+            <form role="form" method="post" action="funciones/modificarUsuario.php" enctype="multipart/form-data" >
               <div class="box-body">
                 <!--primer columna-->
                 <?php
@@ -223,8 +214,8 @@ require('funciones/funciones.php');
                   <label for="telefono">Telefono</label>
                   <?php echo "<input type=text class=form-control name=telefono placeholder=Telefono value={$renglon['telephone']}>"; ?>
                   <br>
-                  <label for="exampleInputFile">Fotografia de perfil</label>
-                      <input type="file" name="exampleInputFile">
+                  <label for="imagen">Fotografia de perfil</label>
+                      <input type="file" name="imagen">
                   <br>
                  </div>
                  <!--tercer columna DINAMICA-->
@@ -471,15 +462,6 @@ case 2:
         </div>
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -494,6 +476,7 @@ case 2:
          <ul class="treeview-menu">
             <li><a href="mistickets.php"><i class="fa fa-circle-o"></i>Mis tickets</a></li>
             <li><a href="crearticketsup.php"><i class="fa fa-circle-o"></i>Crear ticket</a></li>
+            <li><a href="chat.php"><i class="fa fa-comment"></i>Chat Bot</a></li>
           </ul>
         </li>
 
@@ -505,7 +488,7 @@ case 2:
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
+            <li class="active"><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
           </ul>
         </li>
       </ul>
@@ -811,15 +794,6 @@ case 3:
         </div>
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Buscar...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -844,7 +818,7 @@ case 3:
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
+            <li class="active"><?php echo '<a href=modificarUsuario.php?id='.$_SESSION['username'].'><i class="fa fa-circle-o"></i>Perfil</a>'?></li>
           </ul>
         </li>
       </ul>
@@ -910,9 +884,6 @@ case 3:
                   <br>
                   <label for="telefono">Telefono</label>
                   <?php echo "<input type=text class=form-control name=telefono disabled placeholder=Telefono value={$renglon['telephone']}>"; ?>
-                  <br>
-                  <label for="exampleInputFile">Fotografia de perfil</label>
-                      <input type="file" name="exampleInputFile">
                   <br>
                  </div>
                  <!--tercer columna DINAMICA-->

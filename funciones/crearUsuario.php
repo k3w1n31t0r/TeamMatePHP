@@ -63,7 +63,7 @@ if(isset($_POST['insertarUsuario'])=="10"){
                 <h4 class="modal-title">:3</h4>
               </div>
               <div class="modal-body">
-                <p>¡Usuario ereado con exito!&hellip;</p>
+                <p>¡Usuario creado con exito!&hellip;</p>
               </div>
               <div class="modal-footer">
                 <a href='../usuarios.php' class="btn btn-outline">Aceptar</a>
@@ -77,18 +77,49 @@ if(isset($_POST['insertarUsuario'])=="10"){
         <script type="text/javascript">
           $('#enlace').modal({backdrop: 'static', keyboard: false})
           // definimos lo que queremos hacer en el click primero 
-$("#enlace").click(function() { 
-     location.href = this.href; // ir al link 
-});
-// lanzamos la llamada al evento click
-$("#enlace").click();
+          $("#enlace").click(function() { 
+           location.href = this.href; // ir al link 
+          });
+          // lanzamos la llamada al evento click
+          $("#enlace").click();
 
 
         </script>
   <?php
 
 }else{
-  echo "Fallo";
+  ?>
+  <a href="#" id="enlace" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#modal-warning"></a>
+  <div class="modal modal-warning fade" id="modal-warning">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title"> >:( </h4>
+              </div>
+              <div class="modal-body">
+                <p>¡Correo ya existente!&hellip;</p>
+              </div>
+              <div class="modal-footer">
+                <a href='../usuarios.php' class="btn btn-outline">Aceptar</a>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <script type="text/javascript">
+          $('#enlace').modal({backdrop: 'static', keyboard: false})
+          // definimos lo que queremos hacer en el click primero 
+          $("#enlace").click(function() { 
+           location.href = this.href; // ir al link 
+          });
+          // lanzamos la llamada al evento click
+          $("#enlace").click();
+
+
+        </script>
+  <?php
 }
 
 ?>
